@@ -128,3 +128,29 @@ setInterval(()=>{
   updateHeader();
   updateButtons();
 },1000);
+
+function updateYearCountdown() {
+  const now = new Date();
+  const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59); // 31. Dez 23:59:59
+
+  let diff = end - now; // Millisekunden
+  if(diff < 0) return; // Jahr vorbei
+
+  const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+  // Monate ungefähr berechnen (30 Tage pro Monat)
+  const months = Math.floor(totalDays / 30);
+  const days = totalDays % 30;
+
+  const hours = Math.floor(diff / (1000 * 60 * 60)) % 24;
+  const minutes = Math.floor(diff / (1000 * 60)) % 60;
+  const seconds = Math.floor(diff / 1000) % 60;
+
+  document.getElementById("yearCountdown").innerText =
+    `Noch ${months} Monate ${days} Tage ${hours} Stunden ${minutes} Minuten ${seconds} Sekunden bis Jahresende`;
+}
+
+// Countdown starten und jede Sekunde aktualisieren
+updateYearCountdown();
+setInterval(updateYearCountdown, 1000);
+
