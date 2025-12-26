@@ -2,9 +2,6 @@ console.log("fetch test gestartet");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // =====================
-  // ELEMENTE
-  // =====================
   const quoteEl = document.getElementById("quote");
   const personalEl = document.getElementById("personalQuote");
   const morningBtn = document.getElementById("morningBtn");
@@ -16,43 +13,49 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveList = document.getElementById("archiveList");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
-  const personalLink = document.getElementById("personalLink");
+  const yearCountdownEl = document.getElementById("yearCountdown");
+
   const personalOverlay = document.getElementById("personalOverlay");
   const personalContent = document.getElementById("personalContent");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
-
-  const yearCountdownEl = document.getElementById("yearCountdown");
+  const personalLink = document.getElementById("personalLink");
 
   const personalText = `
 <h2>Mein persönlicher Bereich</h2>
-<p>Das hier ist mein persönlicher Text.<br>
-Nur ich als Ersteller ändere ihn.</p>
+<p>Nur ich als Ersteller ändere diesen Text.</p>
 <p>Gedanken, Regeln, Motivation, Vision – alles bleibt hier fest bestehen.</p>
 <ul>
-<li>✔ unveränderbar</li>
-<li>✔ strukturiert</li>
-<li>✔ nur vom Ersteller gepflegt</li>
+  <li>✔ unveränderbar</li>
+  <li>✔ strukturiert</li>
+  <li>✔ nur vom Ersteller gepflegt</li>
 </ul>
 `;
 
+  function openPersonal() {
+    personalContent.innerHTML = personalText;
+    personalOverlay.style.display = "flex";
+  }
+
+  function closePersonal() {
+    personalOverlay.style.display = "none";
+  }
+
+  personalLink.onclick = () => {
+    openPersonal();
+    document.getElementById("menu").style.right = "-260px";
+  };
+  closePersonalBtn.onclick = closePersonal;
+
   let quotesData = null;
 
-  // =====================
-  // DATEN LADEN
-  // =====================
   fetch("quotes.json")
     .then(res => res.json())
     .then(data => {
       quotesData = data;
       showDailyQuote();
     })
-    .catch(() => {
-      quoteEl.innerText = "Fehler beim Laden der Zitate";
-    });
+    .catch(() => { quoteEl.innerText = "Fehler beim Laden der Zitate"; });
 
-  // =====================
-  // HILFSFUNKTIONEN
-  // =====================
   function getDayOfYear() {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
@@ -77,9 +80,6 @@ Nur ich als Ersteller ändere ihn.</p>
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
 
-  // =====================
-  // TAGESZITAT
-  // =====================
   function showDailyQuote() {
     if (!quotesData) return;
     const index = getDayOfYear() % quotesData.daily.length;
@@ -88,31 +88,17 @@ Nur ich als Ersteller ändere ihn.</p>
     saveToArchive("Tageszitat", text);
   }
 
-  // =====================
-  // PERSÖNLICHER BEREICH
-  // =====================
-  function openPersonal() {
-    personalContent.innerHTML = personalText;
-    personalOverlay.style.display = "flex";
+  function showPersonal(type) {
+    const list = quotesData.personal[type];
+    const q = list[getDayOfYear() % list.length];
+    personalEl.innerText = q;
+    personalEl.style.display = "block";
+    saveToArchive(type, q);
   }
 
-  function closePersonal() {
-    personalOverlay.style.display = "none";
-  }
-
-  personalLink.onclick = () => {
-    openPersonal();
-    document.getElementById("menu").style.right = "-260px";
-  };
-  closePersonalBtn.onclick = closePersonal;
-
-  // =====================
-  // ARCHIV
-  // =====================
   function saveToArchive(type, text) {
     const today = new Date().toLocaleDateString("de-DE");
     let archive = JSON.parse(localStorage.getItem("archive")) || [];
-
     if (!archive.some(i => i.date === today && i.type === type)) {
       archive.unshift({ date: today, type, text });
       localStorage.setItem("archive", JSON.stringify(archive));
@@ -135,9 +121,6 @@ Nur ich als Ersteller ändere ihn.</p>
     archiveOverlay.style.display = "none";
   }
 
-  // =====================
-  // BUTTONS
-  // =====================
   function updateButtons() {
     const h = new Date().getHours();
     morningBtn.disabled = !(h >= 6 && h < 12);
@@ -152,36 +135,27 @@ Nur ich als Ersteller ändere ihn.</p>
   menuButton.onclick = openArchive;
   closeArchiveBtn.onclick = closeArchive;
 
-  // =====================
-  // JAHRES-COUNTDOWN
-  // =====================
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
-    let diff = end - now;
+    const diff = end - now;
     if (diff < 0) return;
-
     const totalSeconds = Math.floor(diff / 1000);
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-
     yearCountdownEl.innerText =
       `Noch ${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek bis Jahresende`;
   }
 
-  // =====================
-  // START
-  // =====================
   updateHeader();
   updateButtons();
-  showDailyQuote();
   updateYearCountdown();
-
   setInterval(() => {
     updateHeader();
     updateButtons();
     updateYearCountdown();
   }, 1000);
+
 });
