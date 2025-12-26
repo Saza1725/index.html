@@ -15,16 +15,13 @@
 
 <body>
 
-  <!-- Menü Button -->
   <div id="menuButton">☰</div>
 
-  <!-- Menü -->
   <nav id="menu">
     <a href="#" id="homeLink">Heute</a>
     <a href="#" id="archiveLink">Archiv</a>
   </nav>
 
-  <!-- HEADER -->
   <header id="header">
     <div id="daytime"></div>
     <div id="weekday"></div>
@@ -32,9 +29,10 @@
     <div id="time"></div>
   </header>
 
-  <!-- HAUPTZITAT -->
   <main id="main">
     <div id="quote">Lädt...</div>
+
+    <!-- ✅ NUR EIN COUNTDOWN -->
     <div id="yearCountdown"></div>
 
     <div id="buttons">
@@ -44,22 +42,16 @@
     </div>
 
     <div id="personalQuote"></div>
-   <div id="yearCountdown"></div>
   </main>
 
-  <!-- ARCHIV OVERLAY -->
-<div id="archiveOverlay">
-  <div id="archiveHeader">
-    <span>Archiv</span>
-    <button id="closeArchiveBtn">✕</button>
+  <div id="archiveOverlay">
+    <div id="archiveHeader">
+      <span>Archiv</span>
+      <button id="closeArchiveBtn">✕</button>
+    </div>
+    <div id="archiveList"></div>
   </div>
 
-  <div id="archiveList"></div>
-</div>
-
-
-  <!-- LOGIK -->
   <script src="app.js"></script>
-
 </body>
 </html>
