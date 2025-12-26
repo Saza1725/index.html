@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== DOM ELEMENTE =====
+  // ======= DOM ELEMENTE =======
   const quoteEl = document.getElementById("quote");
   const personalEl = document.getElementById("personalQuote");
   const morningBtn = document.getElementById("morningBtn");
@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveLink = document.getElementById("archiveLink");
 
   const personalOverlay = document.getElementById("personalOverlay");
-  const personalContent = document.getElementById("personalContent");
+  const personalMenu = document.getElementById("personalMenu");
+  const personalDetail = document.getElementById("personalDetail");
+  const personalBackBtn = document.getElementById("personalBackBtn");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
@@ -26,168 +28,121 @@ document.addEventListener("DOMContentLoaded", () => {
   let menuOpen = false;
   let quotesData = null;
 
-  // ===== MENU SLIDE =====
+  // ======= MENU SLIDE =======
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
   };
-  [homeLink, personalLink, archiveLink].forEach(link => {
+  [homeLink, archiveLink, personalLink].forEach(link => {
     link.onclick = () => { menu.style.right = "-260px"; menuOpen = false; };
   });
 
-  // === Persönlicher Bereich Erweiterung ===
-const personalMenu = document.getElementById("personalMenu");
-const personalDetail = document.getElementById("personalDetail");
-const personalBackBtn = document.getElementById("personalBackBtn");
+  // ======= PERSÖNLICHER BEREICH =======
+  const personalSections = [
+    { id: "notes", title: "Meine Notizen" },
+    { id: "weeklyQuote", title: "Persönliches Zitat der Woche" }
+  ];
 
-// Persönliche Unterpunkte
-const personalSections = [
-  { id: "notes", title: "Meine Notizen", content: "" },
-  { id: "weeklyQuote", title: "Persönliches Zitat der Woche", content: "" }
-];
-
-// Zeige Übersicht der Unterpunkte
-function showPersonalMenu() {
-  personalDetail.style.display = "none";
-  personalBackBtn.style.display = "none";
-  personalMenu.style.display = "flex";
-  personalMenu.innerHTML = "";
-
-  personalSections.forEach(section => {
-    const btn = document.createElement("button");
-    btn.innerText = section.title;
-    btn.onclick = () => showPersonalDetail(section.id);
-    personalMenu.appendChild(btn);
-  });
-}
-
-// Zeige Details eines Unterpunktes
-function showPersonalDetail(id) {
-  const section = personalSections.find(s => s.id === id);
-  if (!section) return;
-
-  personalMenu.style.display = "none";
-  personalBackBtn.style.display = "block";
-  personalDetail.style.display = "block";
-  personalDetail.innerHTML = "";
-
-  const h3 = document.createElement("h3");
-  h3.innerText = section.title;
-  personalDetail.appendChild(h3);
-
-  // Notizen Bereich
-  if(id === "notes") {
-    const textarea = document.createElement("textarea");
-    textarea.style.width = "90%";
-    textarea.style.minHeight = "150px";
-    textarea.value = section.content;
-    textarea.oninput = () => { section.content = textarea.value; };
-    personalDetail.appendChild(textarea);
-
-    const saveBtn = document.createElement("button");
-    saveBtn.innerText = "Notizen speichern";
-    saveBtn.style.marginTop = "10px";
-    saveBtn.onclick = () => {
-      localStorage.setItem("personalNotes", textarea.value);
-      alert("Notizen gespeichert!");
-    };
-    personalDetail.appendChild(saveBtn);
-
-    // Lade gespeicherte Notizen
-    const saved = localStorage.getItem("personalNotes");
-    if(saved) { textarea.value = saved; section.content = saved; }
+  function showPersonalMenu() {
+    personalDetail.style.display = "none";
+    personalBackBtn.style.display = "none";
+    personalMenu.style.display = "flex";
+    personalMenu.innerHTML = "";
+    personalSections.forEach(section => {
+      const btn = document.createElement("button");
+      btn.innerText = section.title;
+      btn.onclick = () => showPersonalDetail(section.id);
+      personalMenu.appendChild(btn);
+    });
   }
 
-  // Persönliches Wochenzitat
-  if(id === "weeklyQuote") {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.style.width = "80%";
-    input.value = section.content;
-    input.oninput = () => { section.content = input.value; };
-    personalDetail.appendChild(input);
+  function showPersonalDetail(id) {
+    personalMenu.style.display = "none";
+    personalBackBtn.style.display = "block";
+    personalDetail.style.display = "block";
+    personalDetail.innerHTML = "";
 
-    const saveBtn = document.createElement("button");
-    saveBtn.innerText = "Zitat speichern";
-    saveBtn.style.marginTop = "10px";
-    saveBtn.onclick = () => {
-      localStorage.setItem("personalWeeklyQuote", input.value);
-      alert("Zitat gespeichert!");
-    };
-    personalDetail.appendChild(saveBtn);
+    const h3 = document.createElement("h3");
+    h3.innerText = personalSections.find(s => s.id === id).title;
+    personalDetail.appendChild(h3);
 
-    // Lade gespeichertes Zitat
-    const savedQuote = localStorage.getItem("personalWeeklyQuote");
-    if(savedQuote) { input.value = savedQuote; section.content = savedQuote; }
+    if(id === "notes") {
+      const textarea = document.createElement("textarea");
+      textarea.style.width = "90%";
+      textarea.style.minHeight = "150px";
+      textarea.value = localStorage.getItem("personalNotes") || "";
+      personalDetail.appendChild(textarea);
+
+      const saveBtn = document.createElement("button");
+      saveBtn.innerText = "Notizen speichern";
+      saveBtn.style.marginTop = "10px";
+      saveBtn.onclick = () => {
+        localStorage.setItem("personalNotes", textarea.value);
+        alert("Notizen gespeichert!");
+      };
+      personalDetail.appendChild(saveBtn);
+    }
+
+    if(id === "weeklyQuote") {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.style.width = "80%";
+      input.value = localStorage.getItem("personalWeeklyQuote") || "";
+      personalDetail.appendChild(input);
+
+      const saveBtn = document.createElement("button");
+      saveBtn.innerText = "Zitat speichern";
+      saveBtn.style.marginTop = "10px";
+      saveBtn.onclick = () => {
+        localStorage.setItem("personalWeeklyQuote", input.value);
+        alert("Zitat gespeichert!");
+      };
+      personalDetail.appendChild(saveBtn);
+    }
   }
-}
 
-// Rückpfeil
-personalBackBtn.onclick = showPersonalMenu;
+  personalBackBtn.onclick = showPersonalMenu;
+  personalLink.onclick = () => { personalOverlay.style.display = "flex"; showPersonalMenu(); };
+  closePersonalBtn.onclick = () => personalOverlay.style.display = "none";
 
-// Öffnen des persönlichen Bereichs
-personalLink.onclick = () => {
-  personalOverlay.style.display = "flex";
-  showPersonalMenu();
-};
-  // ===== ZITATE LADEN =====
+  // ======= ZITATE LADEN =======
   fetch("quotes.json")
     .then(res => { if(!res.ok) throw new Error("quotes.json nicht gefunden"); return res.json(); })
     .then(data => { quotesData = data; showDailyQuote(); })
     .catch(err => { console.error(err); quoteEl.innerText = "Fehler beim Laden der Zitate"; });
 
-  // ===== HILFSFUNKTIONEN =====
-  function getDayOfYear() {
-    const now = new Date();
-    const start = new Date(now.getFullYear(),0,0);
-    return Math.floor((now-start)/86400000);
-  }
-  function getCategory() {
-    const h = new Date().getHours();
-    if(h>=6 && h<12) return "morning";
-    if(h>=12 && h<18) return "noon";
-    return "evening";
-  }
-  function updateHeader() {
-    const now = new Date();
-    const days=["So","Mo","Di","Mi","Do","Fr","Sa"];
-    document.getElementById("daytime").innerText = getCategory()==="morning"?"Morgen":getCategory()==="noon"?"Mittag":"Abend";
-    document.getElementById("weekday").innerText = days[now.getDay()];
-    document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
-    document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
-  }
+  function getDayOfYear() { const now = new Date(); const start = new Date(now.getFullYear(),0,0); return Math.floor((now-start)/86400000); }
+  function getCategory() { const h=new Date().getHours(); return h>=6&&h<12?"morning":h>=12&&h<18?"noon":"evening"; }
+  function updateHeader() { const now=new Date(); const days=["So","Mo","Di","Mi","Do","Fr","Sa"]; document.getElementById("daytime").innerText=getCategory()==="morning"?"Morgen":getCategory()==="noon"?"Mittag":"Abend"; document.getElementById("weekday").innerText=days[now.getDay()]; document.getElementById("date").innerText=now.toLocaleDateString("de-DE"); document.getElementById("time").innerText=now.toLocaleTimeString("de-DE"); }
 
-  // ===== TAGESZITAT + AUTOMATISCHES ARCHIV =====
+  // ======= TAGESZITAT + ARCHIV =======
   function showDailyQuote() {
     if(!quotesData) return;
-    const index = getDayOfYear()%quotesData.daily.length;
+    const index = getDayOfYear() % quotesData.daily.length;
     const text = quotesData.daily[index];
     quoteEl.innerText = text;
     saveDailyQuoteToArchive(text);
   }
 
   function saveDailyQuoteToArchive(text) {
-    const now = new Date();
-    const startDate = new Date(2025,11,27);
-    const endDate = new Date(2026,11,31);
-    if(now<startDate || now>endDate) return;
-
-    const dateStr = now.toLocaleDateString("de-DE");
-    const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
-    let archive = JSON.parse(localStorage.getItem("archive"))||{};
+    const now=new Date();
+    const startDate=new Date(2025,11,27);
+    const endDate=new Date(2026,11,31);
+    if(now<startDate||now>endDate) return;
+    const dateStr=now.toLocaleDateString("de-DE");
+    const monthKey=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
+    let archive=JSON.parse(localStorage.getItem("archive"))||{};
     if(!archive[monthKey]) archive[monthKey]=[];
-    if(!archive[monthKey].some(e=>e.date===dateStr)){
-      archive[monthKey].push({date:dateStr,text});
-      localStorage.setItem("archive",JSON.stringify(archive));
-    }
+    if(!archive[monthKey].some(e=>e.date===dateStr)){ archive[monthKey].push({date:dateStr,text}); localStorage.setItem("archive",JSON.stringify(archive)); }
   }
 
-  // ===== ARCHIV-FUNKTION =====
+  // ======= ARCHIV =======
   const months = [];
   for(let y=2025;y<=2026;y++){
     const startM = y===2025?12:1;
-    const endM = 12;
-    for(let m=startM;m<=endM;m++){ months.push({year:y,month:m}); }
+    for(let m=startM;m<=12;m++){
+      months.push({year:y,month:m});
+    }
   }
 
   function showMonths(){
@@ -209,20 +164,17 @@ personalLink.onclick = () => {
     backBtn.style.display="block";
     monthDetail.style.display="block";
     monthDetail.innerHTML="";
-
     const monthKey=`${year}-${String(month).padStart(2,"0")}`;
     const archive=JSON.parse(localStorage.getItem("archive"))||{};
     const monthData=archive[monthKey]||[];
-
     const h3=document.createElement("h3");
     h3.innerText=new Date(year,month-1,1).toLocaleDateString("de-DE",{month:"long",year:"numeric"});
     monthDetail.appendChild(h3);
-
     if(monthData.length===0){
       const p=document.createElement("p");
       p.innerText="Keine Zitate für diesen Monat.";
       monthDetail.appendChild(p);
-    } else {
+    }else{
       monthData.forEach(e=>{
         const div=document.createElement("div");
         div.className="archiveItem";
@@ -234,26 +186,28 @@ personalLink.onclick = () => {
 
   backBtn.onclick=showMonths;
   closeArchiveBtn.onclick=()=>archiveOverlay.style.display="none";
-  archiveLink.onclick=()=>{ archiveOverlay.style.display="flex"; showMonths(); };
+  archiveLink.onclick=()=>{archiveOverlay.style.display="flex"; showMonths();};
 
-  // ===== PERSÖNLICHE ZITATE BUTTONS =====
+  // ======= PERSÖNLICHE ZITATE BUTTONS =======
   morningBtn.onclick=()=>showPersonalQuote("morning");
   noonBtn.onclick=()=>showPersonalQuote("noon");
   eveningBtn.onclick=()=>showPersonalQuote("evening");
+
   function showPersonalQuote(type){
+    if(!quotesData) return;
     personalEl.innerText=quotesData.personal[type][getDayOfYear()%quotesData.personal[type].length];
     personalEl.style.display="block";
   }
 
-  // ===== BUTTON STATUS =====
+  // ======= BUTTON STATUS =======
   function updateButtons(){
     const h=new Date().getHours();
-    morningBtn.disabled=!(h>=6 && h<12);
-    noonBtn.disabled=!(h>=12 && h<18);
-    eveningBtn.disabled=!(h>=18 || h<6);
+    morningBtn.disabled=!(h>=6&&h<12);
+    noonBtn.disabled=!(h>=12&&h<18);
+    eveningBtn.disabled=!(h>=18||h<6);
   }
 
-  // ===== COUNTDOWN =====
+  // ======= COUNTDOWN =======
   function updateYearCountdown(){
     const now=new Date();
     const end=new Date(now.getFullYear(),11,31,23,59,59);
@@ -267,11 +221,15 @@ personalLink.onclick = () => {
     yearCountdownEl.innerText=`Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
-  // ===== START =====
+  // ======= START =======
   updateHeader();
   updateButtons();
   updateYearCountdown();
   showDailyQuote();
-  setInterval(()=>{ updateHeader(); updateButtons(); updateYearCountdown(); },1000);
 
+  setInterval(()=>{
+    updateHeader();
+    updateButtons();
+    updateYearCountdown();
+  },1000);
 });
