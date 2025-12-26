@@ -35,22 +35,101 @@ document.addEventListener("DOMContentLoaded", () => {
     link.onclick = () => { menu.style.right = "-260px"; menuOpen = false; };
   });
 
-  // ===== PERSÖNLICHER BEREICH =====
-  const personalText = `
-    <h2>Mein persönlicher Bereich</h2>
-    <p>Nur vom Ersteller gepflegt.</p>
-    <ul>
-      <li>✔ unveränderbar</li>
-      <li>✔ strukturiert</li>
-      <li>✔ nur vom Ersteller</li>
-    </ul>
-  `;
-  personalLink.onclick = () => {
-    personalContent.innerHTML = personalText;
-    personalOverlay.style.display = "flex";
-  };
-  closePersonalBtn.onclick = () => personalOverlay.style.display = "none";
+  // === Persönlicher Bereich Erweiterung ===
+const personalMenu = document.getElementById("personalMenu");
+const personalDetail = document.getElementById("personalDetail");
+const personalBackBtn = document.getElementById("personalBackBtn");
 
+// Persönliche Unterpunkte
+const personalSections = [
+  { id: "notes", title: "Meine Notizen", content: "" },
+  { id: "weeklyQuote", title: "Persönliches Zitat der Woche", content: "" }
+];
+
+// Zeige Übersicht der Unterpunkte
+function showPersonalMenu() {
+  personalDetail.style.display = "none";
+  personalBackBtn.style.display = "none";
+  personalMenu.style.display = "flex";
+  personalMenu.innerHTML = "";
+
+  personalSections.forEach(section => {
+    const btn = document.createElement("button");
+    btn.innerText = section.title;
+    btn.onclick = () => showPersonalDetail(section.id);
+    personalMenu.appendChild(btn);
+  });
+}
+
+// Zeige Details eines Unterpunktes
+function showPersonalDetail(id) {
+  const section = personalSections.find(s => s.id === id);
+  if (!section) return;
+
+  personalMenu.style.display = "none";
+  personalBackBtn.style.display = "block";
+  personalDetail.style.display = "block";
+  personalDetail.innerHTML = "";
+
+  const h3 = document.createElement("h3");
+  h3.innerText = section.title;
+  personalDetail.appendChild(h3);
+
+  // Notizen Bereich
+  if(id === "notes") {
+    const textarea = document.createElement("textarea");
+    textarea.style.width = "90%";
+    textarea.style.minHeight = "150px";
+    textarea.value = section.content;
+    textarea.oninput = () => { section.content = textarea.value; };
+    personalDetail.appendChild(textarea);
+
+    const saveBtn = document.createElement("button");
+    saveBtn.innerText = "Notizen speichern";
+    saveBtn.style.marginTop = "10px";
+    saveBtn.onclick = () => {
+      localStorage.setItem("personalNotes", textarea.value);
+      alert("Notizen gespeichert!");
+    };
+    personalDetail.appendChild(saveBtn);
+
+    // Lade gespeicherte Notizen
+    const saved = localStorage.getItem("personalNotes");
+    if(saved) { textarea.value = saved; section.content = saved; }
+  }
+
+  // Persönliches Wochenzitat
+  if(id === "weeklyQuote") {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.style.width = "80%";
+    input.value = section.content;
+    input.oninput = () => { section.content = input.value; };
+    personalDetail.appendChild(input);
+
+    const saveBtn = document.createElement("button");
+    saveBtn.innerText = "Zitat speichern";
+    saveBtn.style.marginTop = "10px";
+    saveBtn.onclick = () => {
+      localStorage.setItem("personalWeeklyQuote", input.value);
+      alert("Zitat gespeichert!");
+    };
+    personalDetail.appendChild(saveBtn);
+
+    // Lade gespeichertes Zitat
+    const savedQuote = localStorage.getItem("personalWeeklyQuote");
+    if(savedQuote) { input.value = savedQuote; section.content = savedQuote; }
+  }
+}
+
+// Rückpfeil
+personalBackBtn.onclick = showPersonalMenu;
+
+// Öffnen des persönlichen Bereichs
+personalLink.onclick = () => {
+  personalOverlay.style.display = "flex";
+  showPersonalMenu();
+};
   // ===== ZITATE LADEN =====
   fetch("quotes.json")
     .then(res => { if(!res.ok) throw new Error("quotes.json nicht gefunden"); return res.json(); })
