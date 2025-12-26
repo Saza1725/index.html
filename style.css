@@ -48,18 +48,6 @@ header {
 }
 
 #yearCountdown {
-  margin-top: 20px;
-  font-size: 1.5em;             
-  color: white;
-  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
-  background: rgba(0,0,0,0.5);  
-  border: 2px solid white;      
-  border-radius: 12px;           
-  padding: 15px 20px;           
-  display: inline-block;         
-}
-
-#yearCountdown {
   margin: 30px auto;
   max-width: 90%;
   padding: 15px 20px;
