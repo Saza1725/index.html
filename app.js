@@ -24,8 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
   const yearCountdownEl = document.getElementById("yearCountdown");
-
-  let quotesData = null;
   
   const personalText = `
 <h2>Mein persönlicher Bereich</h2>
@@ -46,6 +44,29 @@ alles bleibt hier fest bestehen.
   <li>✔ nur vom Ersteller gepflegt</li>
 </ul>
 `;
+
+const personalOverlay = document.getElementById("personalOverlay");
+const personalContent = document.getElementById("personalContent");
+const closePersonalBtn = document.getElementById("closePersonalBtn");
+const personalLink = document.getElementById("personalLink");
+
+function openPersonal() {
+  personalContent.innerHTML = personalText;
+  personalOverlay.style.display = "flex";
+}
+
+function closePersonal() {
+  personalOverlay.style.display = "none";
+}
+
+personalLink.onclick = () => {
+  openPersonal();
+  document.getElementById("menu").style.right = "-260px";
+};
+
+closePersonalBtn.onclick = closePersonal;
+
+let quotesData = null;
 
   // =====================
   // ZITATE LADEN
