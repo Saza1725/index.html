@@ -52,14 +52,18 @@
   </div>
 
   <!-- PERSÖNLICH OVERLAY -->
-  <div id="personalOverlay">
-    <div id="personalHeader">
-      <span>Persönlich</span>
-      <button id="closePersonalBtn">✕</button>
-    </div>
-    <div id="personalContent"></div>
+<div id="personalOverlay">
+  <div id="personalHeader">
+    <span>Persönlich</span>
+    <button id="closePersonalBtn">✕</button>
   </div>
 
-  <script src="app.js"></script>
-</body>
-</html>
+  <!-- Zurück-Button -->
+  <button id="personalBackBtn">← Zurück</button>
+
+  <!-- Unterpunkte Übersicht -->
+  <div id="personalMenu" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+
+  <!-- Unterpunkt Detail -->
+  <div id="personalDetail" style="margin-top:20px;"></div>
+</div>
