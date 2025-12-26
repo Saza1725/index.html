@@ -59,6 +59,18 @@ header {
   display: inline-block;         
 }
 
+#yearCountdown {
+  margin: 30px auto;
+  max-width: 90%;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
 #quote {
   margin: 40px auto;
   max-width: 80%;
@@ -159,15 +171,4 @@ button:disabled {
   margin-bottom: 5px;
 }
 
-#yearCountdown {
-  margin: 30px auto;
-  max-width: 90%;
-  padding: 15px 20px;
-  font-size: 1.2em;
-  font-weight: bold;
-  background: rgba(0,0,0,0.5);
-  border: 2px solid rgba(255,255,255,0.4);
-  border-radius: 14px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
 
