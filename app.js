@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =====================
-  // TAGESZITAT + ARCHIV (MONATLICH)
+  // TAGESZITAT + AUTOMATISCHES ARCHIV
   // =====================
   function showDailyQuote() {
     if (!quotesData) return;
@@ -76,8 +76,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function saveDailyQuoteToArchive(text) {
     const now = new Date();
-    const startDate = new Date(2025, 11, 27);
-    if (now < startDate) return;
+    const startDate = new Date(2025, 11, 27); // ab 27.12.2025
+    const endDate = new Date(2026, 11, 31);   // bis 31.12.2026
+    if (now < startDate || now > endDate) return;
 
     const dateStr = now.toLocaleDateString("de-DE");
     const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
@@ -86,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!archive[monthKey]) archive[monthKey] = [];
 
+    // Kein Duplikat
     if (!archive[monthKey].some(e => e.date === dateStr)) {
       archive[monthKey].push({ date: dateStr, text });
       localStorage.setItem("archive", JSON.stringify(archive));
@@ -93,15 +95,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =====================
-  // ARCHIV ANZEIGEN
+  // ARCHIV-OVERLAY + DATUMSSUCHE
   // =====================
   function openArchive() {
     archiveOverlay.style.display = "flex";
-    archiveList.innerHTML = "";
+    archiveOverlay.style.backgroundColor = "#b0d4f1"; // Schneeblauton
+    archiveOverlay.style.color = "#000";
+    archiveOverlay.style.padding = "20px";
+    archiveOverlay.style.borderRadius = "12px";
+
+    archiveList.innerHTML = `
+      <label for="searchDate">Zitat suchen nach Datum:</label>
+      <input type="date" id="searchDate">
+      <button id="searchBtn">Suchen</button>
+      <div id="searchResult" style="margin-top:15px; font-weight:bold;"></div>
+      <hr>
+    `;
+
+    const searchDate = document.getElementById("searchDate");
+    const searchBtn = document.getElementById("searchBtn");
+    const searchResult = document.getElementById("searchResult");
 
     const archive = JSON.parse(localStorage.getItem("archive")) || {};
     const months = Object.keys(archive).sort().reverse();
 
+    // Zeige alle Zitate nach Monat gruppiert
     months.forEach(key => {
       const title = document.createElement("h3");
       title.innerText = new Date(key + "-01")
@@ -115,6 +133,23 @@ document.addEventListener("DOMContentLoaded", () => {
         archiveList.appendChild(div);
       });
     });
+
+    // Suchfunktion
+    searchBtn.onclick = () => {
+      const val = searchDate.value;
+      if (!val) return alert("Bitte ein Datum auswählen");
+
+      const d = new Date(val);
+      const monthKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+      const dayStr = d.toLocaleDateString("de-DE");
+
+      if (archive[monthKey]) {
+        const found = archive[monthKey].find(e => e.date === dayStr);
+        searchResult.innerText = found ? found.text : "Kein Zitat gefunden für dieses Datum.";
+      } else {
+        searchResult.innerText = "Kein Zitat gefunden für dieses Datum.";
+      }
+    };
   }
 
   function closeArchive() {
@@ -183,4 +218,5 @@ document.addEventListener("DOMContentLoaded", () => {
     updateButtons();
     updateYearCountdown();
   }, 1000);
+
 });
