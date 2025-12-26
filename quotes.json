@@ -1,16 +1,23 @@
-[
-  "Bleib bei dir, egal wer geht.",
-  "Heute ist ein guter Tag, nicht aufzugeben.",
-  "Du musst nicht alles schaffen – nur weitermachen.",
-  "Falsche Menschen loszulassen ist Selbstrespekt.",
-  "Fokus auf dich verändert dein ganzes Leben.",
-  "Stärke wächst leise, nicht im Lärm.",
-  "Nicht jeder Weg braucht Applaus.",
-  "Du bist nicht hier, um es allen recht zu machen.",
-  "Wer an sich arbeitet, verliert andere – und gewinnt sich.",
-  "Dein Tempo ist richtig.",
-  "Manchmal ist Abstand der größte Fortschritt.",
-  "Disziplin schlägt Motivation.",
+{
+  "daily": [
+    "Heute ist ein guter Tag, nicht aufzugeben.",
+    "Bleib bei dir, egal wer geht.",
+    "Du musst nicht alles schaffen – nur weitermachen.",
+    "Heute ist ein guter Tag, nicht aufzugeben.",
+    "Du musst nicht alles schaffen – nur weitermachen.",
+    "Falsche Menschen loszulassen ist Selbstrespekt.",
+    "Fokus auf dich verändert dein ganzes Leben.",
+    "Stärke wächst leise, nicht im Lärm.",
+    "Nicht jeder Weg braucht Applaus.",
+    "Du bist nicht hier, um es allen recht zu machen.",
+    "Wer an sich arbeitet, verliert andere – und gewinnt sich.",
+     "Dein Tempo ist richtig.",
+    "Manchmal ist Abstand der größte Fortschritt."
+  ],
+  "personal": {
+    "morning": [
+      "Morgen-Impuls: Heute fokussierst du dich auf dich.",
+      "Disziplin schlägt Motivation.",
   "Du darfst gehen, wo du klein gehalten wirst.",
   "Heute zählt nur, dass du dranbleibst.",
   "Deine Ruhe ist kein Rückzug, sondern Kraft.",
@@ -20,17 +27,23 @@
   "Es ist okay, nicht mehr dieselbe Person zu sein.",
   "Konzentrier dich auf das, was du kontrollieren kannst.",
   "Du bist weiter als du denkst.",
-  "Grenzen zu setzen ist kein Egoismus.",
-  "Dein Wert hängt nicht von anderen ab.",
+  "Grenzen zu setzen ist kein Egoismus."
+    ],
+    "noon": [
+      "Mittag-Impuls: Energie bei dir behalten, falsche Menschen loslassen.",
+       "Dein Wert hängt nicht von anderen ab.",
   "Still bleiben und weitermachen ist auch Mut.",
   "Heute arbeitest du für dein zukünftiges Ich.",
   "Loslassen ist auch eine Entscheidung.",
   "Nicht alles, was endet, ist ein Verlust.",
   "Dein Weg muss nur für dich Sinn ergeben.",
   "Klarheit kommt durch Handeln.",
-  "Bleib konsequent – nicht perfekt."
-  "Das Leben ist zu kurz für irgendwann.",
-  "Man sieht sich immer zweimal im Leben.",
+  "Bleib konsequent – nicht perfekt.",
+  "Das Leben ist zu kurz für irgendwann."
+    ],
+    "evening": [
+      "Abend-Impuls: Stolz auf dich, Ruhe ist verdient.",
+      "Man sieht sich immer zweimal im Leben.",
   "Vorne ist immer da, wo sich keiner auskennt.",
   "Wenn Chancen nicht anklopfen, baue eine Tür.",
   "Innen muss etwas brennen, damit außen etwas leuchten kann.",
@@ -39,4 +52,7 @@
   "Unsere Sichtweise entscheidet über unsere Zufriedenheit.",
   "Menschen sind aggressiver, wenn sie sich unsicher fühlen.",
   "Wer für seine Beschränkungen kämpft, wird sie behalten."
-]
+    ]
+  }
+}
+[
