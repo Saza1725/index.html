@@ -1,3 +1,15 @@
+console.log("fetch test gestartet");
+
+fetch("quotes.json")
+  .then(res => {
+    console.log("Response ok:", res.ok); // true = Datei erreichbar
+    return res.json();
+  })
+  .then(data => {
+    console.log("Daten geladen:", data); // zeigt die Inhalte der JSON
+  })
+  .catch(err => console.error("Fehler beim Laden der Zitate:", err));
+
 const quoteEl = document.getElementById("quote");
 const personalEl = document.getElementById("personalQuote");
 const countdownEl = document.getElementById("countdown");
