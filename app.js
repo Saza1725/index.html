@@ -1,17 +1,10 @@
 console.log("fetch test gestartet");
 
-fetch("quotes.json")
-  .then(res => {
-    console.log("Response ok:", res.ok); // true = Datei erreichbar
-    return res.json();
-  })
-  .then(data => {
-    console.log("Daten geladen:", data); // zeigt die Inhalte der JSON
-  })
-  .catch(err => console.error("Fehler beim Laden der Zitate:", err));
-
 document.addEventListener("DOMContentLoaded", () => {
 
+  // =====================
+  // ELEMENTE
+  // =====================
   const quoteEl = document.getElementById("quote");
   const personalEl = document.getElementById("personalQuote");
   const morningBtn = document.getElementById("morningBtn");
@@ -23,53 +16,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveList = document.getElementById("archiveList");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
+  const personalLink = document.getElementById("personalLink");
+  const personalOverlay = document.getElementById("personalOverlay");
+  const personalContent = document.getElementById("personalContent");
+  const closePersonalBtn = document.getElementById("closePersonalBtn");
+
   const yearCountdownEl = document.getElementById("yearCountdown");
-  
+
   const personalText = `
 <h2>Mein persönlicher Bereich</h2>
-
-<p>
-Das hier ist mein persönlicher Text.
-Nur ich als Ersteller ändere ihn.
-</p>
-
-<p>
-Gedanken, Regeln, Motivation, Vision –
-alles bleibt hier fest bestehen.
-</p>
-
+<p>Das hier ist mein persönlicher Text.<br>
+Nur ich als Ersteller ändere ihn.</p>
+<p>Gedanken, Regeln, Motivation, Vision – alles bleibt hier fest bestehen.</p>
 <ul>
-  <li>✔ unveränderbar</li>
-  <li>✔ strukturiert</li>
-  <li>✔ nur vom Ersteller gepflegt</li>
+<li>✔ unveränderbar</li>
+<li>✔ strukturiert</li>
+<li>✔ nur vom Ersteller gepflegt</li>
 </ul>
 `;
 
-const personalOverlay = document.getElementById("personalOverlay");
-const personalContent = document.getElementById("personalContent");
-const closePersonalBtn = document.getElementById("closePersonalBtn");
-const personalLink = document.getElementById("personalLink");
-
-function openPersonal() {
-  personalContent.innerHTML = personalText;
-  personalOverlay.style.display = "flex";
-}
-
-function closePersonal() {
-  personalOverlay.style.display = "none";
-}
-
-personalLink.onclick = () => {
-  openPersonal();
-  document.getElementById("menu").style.right = "-260px";
-};
-
-closePersonalBtn.onclick = closePersonal;
-
-let quotesData = null;
+  let quotesData = null;
 
   // =====================
-  // ZITATE LADEN
+  // DATEN LADEN
   // =====================
   fetch("quotes.json")
     .then(res => res.json())
@@ -100,11 +69,9 @@ let quotesData = null;
   function updateHeader() {
     const now = new Date();
     const days = ["So","Mo","Di","Mi","Do","Fr","Sa"];
-
     document.getElementById("daytime").innerText =
       getCategory() === "morning" ? "Morgen" :
       getCategory() === "noon" ? "Mittag" : "Abend";
-
     document.getElementById("weekday").innerText = days[now.getDay()];
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
@@ -122,15 +89,22 @@ let quotesData = null;
   }
 
   // =====================
-  // PERSÖNLICHE ZITATE
+  // PERSÖNLICHER BEREICH
   // =====================
-  function showPersonal(type) {
-    const list = quotesData.personal[type];
-    const q = list[getDayOfYear() % list.length];
-    personalEl.innerText = q;
-    personalEl.style.display = "block";
-    saveToArchive(type, q);
+  function openPersonal() {
+    personalContent.innerHTML = personalText;
+    personalOverlay.style.display = "flex";
   }
+
+  function closePersonal() {
+    personalOverlay.style.display = "none";
+  }
+
+  personalLink.onclick = () => {
+    openPersonal();
+    document.getElementById("menu").style.right = "-260px";
+  };
+  closePersonalBtn.onclick = closePersonal;
 
   // =====================
   // ARCHIV
@@ -148,7 +122,6 @@ let quotesData = null;
   function openArchive() {
     archiveOverlay.style.display = "flex";
     archiveList.innerHTML = "";
-
     const archive = JSON.parse(localStorage.getItem("archive")) || [];
     archive.forEach(item => {
       const div = document.createElement("div");
@@ -180,12 +153,11 @@ let quotesData = null;
   closeArchiveBtn.onclick = closeArchive;
 
   // =====================
-  // ✅ JAHRES COUNTDOWN
+  // JAHRES-COUNTDOWN
   // =====================
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
-
     let diff = end - now;
     if (diff < 0) return;
 
@@ -204,6 +176,7 @@ let quotesData = null;
   // =====================
   updateHeader();
   updateButtons();
+  showDailyQuote();
   updateYearCountdown();
 
   setInterval(() => {
@@ -212,4 +185,3 @@ let quotesData = null;
     updateYearCountdown();
   }, 1000);
 });
-
