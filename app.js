@@ -23,6 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveList = document.getElementById("archiveList");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
+  const yearCountdownEl = document.getElementById("yearCountdown");
+
   let quotesData = null;
 
   // =====================
@@ -57,9 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateHeader() {
     const now = new Date();
     const days = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+
     document.getElementById("daytime").innerText =
       getCategory() === "morning" ? "Morgen" :
       getCategory() === "noon" ? "Mittag" : "Abend";
+
     document.getElementById("weekday").innerText = days[now.getDay()];
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
@@ -94,11 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const today = new Date().toLocaleDateString("de-DE");
     let archive = JSON.parse(localStorage.getItem("archive")) || [];
 
-    const exists = archive.some(
-      i => i.date === today && i.type === type
-    );
-
-    if (!exists) {
+    if (!archive.some(i => i.date === today && i.type === type)) {
       archive.unshift({ date: today, type, text });
       localStorage.setItem("archive", JSON.stringify(archive));
     }
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =====================
-  // BUTTONS & MENU
+  // BUTTONS
   // =====================
   function updateButtons() {
     const h = new Date().getHours();
@@ -138,11 +138,9 @@ document.addEventListener("DOMContentLoaded", () => {
   menuButton.onclick = openArchive;
   closeArchiveBtn.onclick = closeArchive;
 
-    // =====================
-  // JAHRES-COUNTDOWN
   // =====================
-  const yearCountdownEl = document.getElementById("yearCountdown");
-
+  // ✅ JAHRES COUNTDOWN
+  // =====================
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
@@ -160,18 +158,17 @@ document.addEventListener("DOMContentLoaded", () => {
       `Noch ${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek bis Jahresende`;
   }
 
-  updateYearCountdown();
-  setInterval(updateYearCountdown, 1000);
-
   // =====================
   // START
   // =====================
   updateHeader();
   updateButtons();
+  updateYearCountdown();
+
   setInterval(() => {
     updateHeader();
     updateButtons();
+    updateYearCountdown();
   }, 1000);
-
 });
 
