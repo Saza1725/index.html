@@ -1,3 +1,11 @@
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: url('Polar.jpg') center/cover fixed;
+  color: white;
+  text-align: center;
+}
+
 #menuButton {
   position: fixed;
   top: 15px;
@@ -19,6 +27,61 @@
   z-index: 999;
 }
 
+#menu a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+}
+
+header {
+  margin-top: 15px;
+}
+
+#daytime {
+  font-size: 2em;
+  font-weight: bold;
+}
+
+#weekday, #date, #time {
+  font-size: 1.2em;
+}
+
+#quote {
+  margin: 40px auto;
+  max-width: 80%;
+  font-size: 1.6em;
+  padding: 20px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 15px;
+}
+
+#buttons {
+  margin-top: 20px;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+}
+
+button:disabled {
+  opacity: 0.4;
+}
+
+#personalQuote {
+  margin: 30px auto;
+  max-width: 70%;
+  font-size: 1.2em;
+  background: rgba(0,0,0,0.45);
+  border-radius: 12px;
+  display: none;
+}
+
 #archive {
   position: fixed;
   top: 0;
@@ -31,4 +94,11 @@
   display: none;
   padding: 20px;
   z-index: 1000;
+}
+
+.archiveItem {
+  margin-bottom: 15px;
+  background: rgba(0,0,0,0.35);
+  padding: 12px;
+  border-radius: 10px;
 }
