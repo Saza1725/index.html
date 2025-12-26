@@ -1,15 +1,3 @@
-console.log("fetch test gestartet");
-
-fetch("quotes.json")
-  .then(res => {
-    console.log("Response ok:", res.ok);
-    return res.json();
-  })
-  .then(data => {
-    console.log("Daten geladen:", data);
-  })
-  .catch(err => console.error("Fehler beim Laden der Zitate:", err));
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const quoteEl = document.getElementById("quote");
@@ -23,45 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveList = document.getElementById("archiveList");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
-  const personalOverlay = document.getElementById("personalOverlay");
-  const personalContent = document.getElementById("personalContent");
-  const closePersonalBtn = document.getElementById("closePersonalBtn");
-
   const yearCountdownEl = document.getElementById("yearCountdown");
-
-  const homeLink = document.getElementById("homeLink");
-  const personalLink = document.getElementById("personalLink");
-  const archiveLink = document.getElementById("archiveLink");
-
-  const personalText = `
-<h2>Mein persönlicher Bereich</h2>
-<p>Das hier ist mein persönlicher Text. Nur ich als Ersteller ändere ihn.</p>
-<p>Gedanken, Regeln, Motivation, Vision – alles bleibt hier fest bestehen.</p>
-<ul>
-  <li>✔ unveränderbar</li>
-  <li>✔ strukturiert</li>
-  <li>✔ nur vom Ersteller gepflegt</li>
-</ul>
-`;
-
-function initArchiveMonths() {
-  let archive = JSON.parse(localStorage.getItem("archive")) || {};
-
-  const start = new Date(2025, 11, 27); // 27.12.2025
-  const end = new Date(2026, 11, 31);   // 31.12.2026
-
-  let current = new Date(start.getFullYear(), start.getMonth(), 1);
-
-  while (current <= end) {
-    const key = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
-    if (!archive[key]) archive[key] = [];
-    current.setMonth(current.getMonth() + 1);
-  }
-
-  localStorage.setItem("archive", JSON.stringify(archive));
-}
-
-initArchiveMonths();
 
   let quotesData = null;
 
@@ -69,12 +19,16 @@ initArchiveMonths();
   // ZITATE LADEN
   // =====================
   fetch("quotes.json")
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("quotes.json nicht gefunden");
+      return res.json();
+    })
     .then(data => {
       quotesData = data;
       showDailyQuote();
     })
-    .catch(() => {
+    .catch(err => {
+      console.error(err);
       quoteEl.innerText = "Fehler beim Laden der Zitate";
     });
 
@@ -97,149 +51,75 @@ initArchiveMonths();
   function updateHeader() {
     const now = new Date();
     const days = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+
     document.getElementById("daytime").innerText =
       getCategory() === "morning" ? "Morgen" :
       getCategory() === "noon" ? "Mittag" : "Abend";
+
     document.getElementById("weekday").innerText = days[now.getDay()];
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
-  
-  function formatMonthName(key) {
-  const [year, month] = key.split("-");
-  const date = new Date(year, month - 1);
-  return date.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
-}
 
   // =====================
-  // TAGESZITAT
+  // TAGESZITAT + ARCHIV (MONATLICH)
   // =====================
   function showDailyQuote() {
     if (!quotesData) return;
+
     const index = getDayOfYear() % quotesData.daily.length;
     const text = quotesData.daily[index];
     quoteEl.innerText = text;
-    saveToArchive("Tageszitat", text);
-  }
 
-  // =====================
-  // PERSÖNLICHE ZITATE
-  // =====================
-  function showPersonal(type) {
-    const list = quotesData.personal[type];
-    const q = list[getDayOfYear() % list.length];
-    personalEl.innerText = q;
-    personalEl.style.display = "block";
     saveDailyQuoteToArchive(text);
   }
 
-  // =====================
-  // ARCHIV
-  // =====================
   function saveDailyQuoteToArchive(text) {
-  const now = new Date();
-  const startDate = new Date(2025, 11, 27);
-  if (now < startDate) return;
+    const now = new Date();
+    const startDate = new Date(2025, 11, 27);
+    if (now < startDate) return;
 
-  const dateStr = now.toLocaleDateString("de-DE");
-  const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const dateStr = now.toLocaleDateString("de-DE");
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
 
-  let archive = JSON.parse(localStorage.getItem("archive")) || {};
-  if (!archive[monthKey]) archive[monthKey] = [];
+    let archive = JSON.parse(localStorage.getItem("archive")) || {};
 
-  if (!archive[monthKey].some(e => e.date === dateStr)) {
-    archive[monthKey].push({ date: dateStr, text });
-    localStorage.setItem("archive", JSON.stringify(archive));
-  }
-}
+    if (!archive[monthKey]) archive[monthKey] = [];
 
-  function openArchive() {
-  archiveOverlay.style.display = "flex";
-  archiveList.innerHTML = "";
-
-  const archive = JSON.parse(localStorage.getItem("archive")) || {};
-  const months = Object.keys(archive).sort().reverse();
-
-  let currentYear = "";
-
-  months.forEach(monthKey => {
-    const year = monthKey.split("-")[0];
-
-    if (year !== currentYear) {
-      const y = document.createElement("h2");
-      y.innerText = year;
-      y.style.marginTop = "25px";
-      archiveList.appendChild(y);
-      currentYear = year;
+    if (!archive[monthKey].some(e => e.date === dateStr)) {
+      archive[monthKey].push({ date: dateStr, text });
+      localStorage.setItem("archive", JSON.stringify(archive));
     }
+  }
 
-    const monthTitle = document.createElement("h3");
-    monthTitle.innerText = formatMonthName(monthKey);
-    archiveList.appendChild(monthTitle);
+  // =====================
+  // ARCHIV ANZEIGEN
+  // =====================
+  function openArchive() {
+    archiveOverlay.style.display = "flex";
+    archiveList.innerHTML = "";
 
-    if (archive[monthKey].length === 0) {
-      const empty = document.createElement("div");
-      empty.style.opacity = "0.5";
-      empty.innerText = "– noch keine Einträge –";
-      archiveList.appendChild(empty);
-    } else {
-      archive[monthKey].forEach(entry => {
+    const archive = JSON.parse(localStorage.getItem("archive")) || {};
+    const months = Object.keys(archive).sort().reverse();
+
+    months.forEach(key => {
+      const title = document.createElement("h3");
+      title.innerText = new Date(key + "-01")
+        .toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+      archiveList.appendChild(title);
+
+      archive[key].forEach(e => {
         const div = document.createElement("div");
         div.className = "archiveItem";
-        div.innerHTML = `<div class="date">${entry.date}</div>${entry.text}`;
+        div.innerHTML = `<div class="date">${e.date}</div>${e.text}`;
         archiveList.appendChild(div);
       });
-    }
-  });
-  
-  document.getElementById("archiveSearch").addEventListener("input", function () {
-  const query = this.value.trim();
-  document.querySelectorAll(".archiveItem").forEach(item => {
-    item.style.display = item.innerText.includes(query) ? "block" : "none";
-  });
-});
-}
-
-  // =====================
-  // PERSÖNLICHES OVERLAY
-  // =====================
-  function openPersonal() {
-    personalContent.innerHTML = personalText;
-    personalOverlay.style.display = "flex";
+    });
   }
 
-  function closePersonal() {
-    personalOverlay.style.display = "none";
-  }
-
-  // =====================
-  // MENÜ LINKS
-  // =====================
-  let menuOpen = false;
-  menuButton.onclick = () => {
-    const menu = document.getElementById("menu");
-    menu.style.right = menuOpen ? "-260px" : "0";
-    menuOpen = !menuOpen;
-  };
-
-  homeLink.onclick = () => {
-    document.getElementById("menu").style.right = "-260px";
-    personalOverlay.style.display = "none";
+  function closeArchive() {
     archiveOverlay.style.display = "none";
-  };
-
-  personalLink.onclick = () => {
-    openPersonal();
-    document.getElementById("menu").style.right = "-260px";
-  };
-
-  archiveLink.onclick = () => {
-    openArchive();
-    document.getElementById("menu").style.right = "-260px";
-  };
-
-  closeArchiveBtn.onclick = closeArchive;
-  closePersonalBtn.onclick = closePersonal;
+  }
 
   // =====================
   // BUTTONS
@@ -251,28 +131,44 @@ initArchiveMonths();
     eveningBtn.disabled = !(h >= 18 || h < 6);
   }
 
-  morningBtn.onclick = () => showPersonal("morning");
-  noonBtn.onclick = () => showPersonal("noon");
-  eveningBtn.onclick = () => showPersonal("evening");
+  morningBtn.onclick = () => {
+    personalEl.innerText =
+      quotesData.personal.morning[getDayOfYear() % quotesData.personal.morning.length];
+    personalEl.style.display = "block";
+  };
+
+  noonBtn.onclick = () => {
+    personalEl.innerText =
+      quotesData.personal.noon[getDayOfYear() % quotesData.personal.noon.length];
+    personalEl.style.display = "block";
+  };
+
+  eveningBtn.onclick = () => {
+    personalEl.innerText =
+      quotesData.personal.evening[getDayOfYear() % quotesData.personal.evening.length];
+    personalEl.style.display = "block";
+  };
+
+  menuButton.onclick = openArchive;
+  closeArchiveBtn.onclick = closeArchive;
 
   // =====================
-  // JAHRESCOUNTDOWN
+  // COUNTDOWN
   // =====================
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
-
-    let diff = end - now;
+    const diff = end - now;
     if (diff < 0) return;
 
-    const totalSeconds = Math.floor(diff / 1000);
-    const days = Math.floor(totalSeconds / 86400);
-    const hours = Math.floor((totalSeconds % 86400) / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
+    const sec = Math.floor(diff / 1000);
+    const d = Math.floor(sec / 86400);
+    const h = Math.floor((sec % 86400) / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
 
     yearCountdownEl.innerText =
-      `Noch ${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek bis Jahresende`;
+      `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
   // =====================
@@ -287,5 +183,4 @@ initArchiveMonths();
     updateButtons();
     updateYearCountdown();
   }, 1000);
-
 });
