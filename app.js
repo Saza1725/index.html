@@ -138,6 +138,31 @@ document.addEventListener("DOMContentLoaded", () => {
   menuButton.onclick = openArchive;
   closeArchiveBtn.onclick = closeArchive;
 
+    // =====================
+  // JAHRES-COUNTDOWN
+  // =====================
+  const yearCountdownEl = document.getElementById("yearCountdown");
+
+  function updateYearCountdown() {
+    const now = new Date();
+    const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
+
+    let diff = end - now;
+    if (diff < 0) return;
+
+    const totalSeconds = Math.floor(diff / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    yearCountdownEl.innerText =
+      `Noch ${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek bis Jahresende`;
+  }
+
+  updateYearCountdown();
+  setInterval(updateYearCountdown, 1000);
+
   // =====================
   // START
   // =====================
