@@ -8,17 +8,14 @@
 </head>
 <body>
 
-  <!-- Menü-Button -->
   <div id="menuButton">☰</div>
 
-  <!-- Navigation -->
   <nav id="menu">
     <a href="#" id="homeLink">Heute</a>
     <a href="#" id="personalLink">Persönlich</a>
     <a href="#" id="archiveLink">Archiv</a>
   </nav>
 
-  <!-- Header: Datum & Zeit -->
   <header id="header">
     <div id="daytime"></div>
     <div id="weekday"></div>
@@ -26,7 +23,6 @@
     <div id="time"></div>
   </header>
 
-  <!-- Hauptbereich: Zitat & Buttons -->
   <main id="main">
     <div id="quote">Lädt...</div>
     <div id="yearCountdown"></div>
@@ -52,18 +48,16 @@
   </div>
 
   <!-- PERSÖNLICH OVERLAY -->
-<div id="personalOverlay">
-  <div id="personalHeader">
-    <span>Persönlich</span>
-    <button id="closePersonalBtn">✕</button>
+  <div id="personalOverlay">
+    <div id="personalHeader">
+      <span>Persönlich</span>
+      <button id="closePersonalBtn">✕</button>
+    </div>
+    <button id="personalBackBtn">← Zurück</button>
+    <div id="personalMenu"></div>
+    <div id="personalDetail"></div>
   </div>
 
-  <!-- Zurück-Button -->
-  <button id="personalBackBtn">← Zurück</button>
-
-  <!-- Unterpunkte Übersicht -->
-  <div id="personalMenu" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
-
-  <!-- Unterpunkt Detail -->
-  <div id="personalDetail" style="margin-top:20px;"></div>
-</div>
+  <script src="app.js"></script>
+</body>
+</html>
