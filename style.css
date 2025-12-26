@@ -49,9 +49,14 @@ header {
 
 #yearCountdown {
   margin-top: 20px;
-  font-size: 1.1em;
+  font-size: 1.5em;             /* größerer Text */
   color: white;
-  text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.5);  /* halbtransparenter Hintergrund */
+  border: 2px solid white;      /* weißer Rahmen */
+  border-radius: 12px;           /* abgerundete Ecken */
+  padding: 15px 20px;           /* Innenabstand */
+  display: inline-block;         /* passt sich der Textbreite an */
 }
 
 #quote {
