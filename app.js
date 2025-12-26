@@ -1,5 +1,15 @@
 console.log("fetch test gestartet");
 
+fetch("quotes.json")
+  .then(res => {
+    console.log("Response ok:", res.ok);
+    return res.json();
+  })
+  .then(data => {
+    console.log("Daten geladen:", data);
+  })
+  .catch(err => console.error("Fehler beim Laden der Zitate:", err));
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const quoteEl = document.getElementById("quote");
@@ -13,16 +23,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveList = document.getElementById("archiveList");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
-  const yearCountdownEl = document.getElementById("yearCountdown");
-
   const personalOverlay = document.getElementById("personalOverlay");
   const personalContent = document.getElementById("personalContent");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
+
+  const yearCountdownEl = document.getElementById("yearCountdown");
+
+  const homeLink = document.getElementById("homeLink");
   const personalLink = document.getElementById("personalLink");
+  const archiveLink = document.getElementById("archiveLink");
 
   const personalText = `
 <h2>Mein persönlicher Bereich</h2>
-<p>Nur ich als Ersteller ändere diesen Text.</p>
+<p>Das hier ist mein persönlicher Text. Nur ich als Ersteller ändere ihn.</p>
 <p>Gedanken, Regeln, Motivation, Vision – alles bleibt hier fest bestehen.</p>
 <ul>
   <li>✔ unveränderbar</li>
@@ -31,31 +44,24 @@ document.addEventListener("DOMContentLoaded", () => {
 </ul>
 `;
 
-  function openPersonal() {
-    personalContent.innerHTML = personalText;
-    personalOverlay.style.display = "flex";
-  }
-
-  function closePersonal() {
-    personalOverlay.style.display = "none";
-  }
-
-  personalLink.onclick = () => {
-    openPersonal();
-    document.getElementById("menu").style.right = "-260px";
-  };
-  closePersonalBtn.onclick = closePersonal;
-
   let quotesData = null;
 
+  // =====================
+  // ZITATE LADEN
+  // =====================
   fetch("quotes.json")
     .then(res => res.json())
     .then(data => {
       quotesData = data;
       showDailyQuote();
     })
-    .catch(() => { quoteEl.innerText = "Fehler beim Laden der Zitate"; });
+    .catch(() => {
+      quoteEl.innerText = "Fehler beim Laden der Zitate";
+    });
 
+  // =====================
+  // HILFSFUNKTIONEN
+  // =====================
   function getDayOfYear() {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 0);
@@ -80,6 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
 
+  // =====================
+  // TAGESZITAT
+  // =====================
   function showDailyQuote() {
     if (!quotesData) return;
     const index = getDayOfYear() % quotesData.daily.length;
@@ -88,6 +97,9 @@ document.addEventListener("DOMContentLoaded", () => {
     saveToArchive("Tageszitat", text);
   }
 
+  // =====================
+  // PERSÖNLICHE ZITATE
+  // =====================
   function showPersonal(type) {
     const list = quotesData.personal[type];
     const q = list[getDayOfYear() % list.length];
@@ -96,9 +108,13 @@ document.addEventListener("DOMContentLoaded", () => {
     saveToArchive(type, q);
   }
 
+  // =====================
+  // ARCHIV
+  // =====================
   function saveToArchive(type, text) {
     const today = new Date().toLocaleDateString("de-DE");
     let archive = JSON.parse(localStorage.getItem("archive")) || [];
+
     if (!archive.some(i => i.date === today && i.type === type)) {
       archive.unshift({ date: today, type, text });
       localStorage.setItem("archive", JSON.stringify(archive));
@@ -108,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function openArchive() {
     archiveOverlay.style.display = "flex";
     archiveList.innerHTML = "";
+
     const archive = JSON.parse(localStorage.getItem("archive")) || [];
     archive.forEach(item => {
       const div = document.createElement("div");
@@ -121,6 +138,50 @@ document.addEventListener("DOMContentLoaded", () => {
     archiveOverlay.style.display = "none";
   }
 
+  // =====================
+  // PERSÖNLICHES OVERLAY
+  // =====================
+  function openPersonal() {
+    personalContent.innerHTML = personalText;
+    personalOverlay.style.display = "flex";
+  }
+
+  function closePersonal() {
+    personalOverlay.style.display = "none";
+  }
+
+  // =====================
+  // MENÜ LINKS
+  // =====================
+  let menuOpen = false;
+  menuButton.onclick = () => {
+    const menu = document.getElementById("menu");
+    menu.style.right = menuOpen ? "-260px" : "0";
+    menuOpen = !menuOpen;
+  };
+
+  homeLink.onclick = () => {
+    document.getElementById("menu").style.right = "-260px";
+    personalOverlay.style.display = "none";
+    archiveOverlay.style.display = "none";
+  };
+
+  personalLink.onclick = () => {
+    openPersonal();
+    document.getElementById("menu").style.right = "-260px";
+  };
+
+  archiveLink.onclick = () => {
+    openArchive();
+    document.getElementById("menu").style.right = "-260px";
+  };
+
+  closeArchiveBtn.onclick = closeArchive;
+  closePersonalBtn.onclick = closePersonal;
+
+  // =====================
+  // BUTTONS
+  // =====================
   function updateButtons() {
     const h = new Date().getHours();
     morningBtn.disabled = !(h >= 6 && h < 12);
@@ -132,26 +193,33 @@ document.addEventListener("DOMContentLoaded", () => {
   noonBtn.onclick = () => showPersonal("noon");
   eveningBtn.onclick = () => showPersonal("evening");
 
-  menuButton.onclick = openArchive;
-  closeArchiveBtn.onclick = closeArchive;
-
+  // =====================
+  // JAHRESCOUNTDOWN
+  // =====================
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
-    const diff = end - now;
+
+    let diff = end - now;
     if (diff < 0) return;
+
     const totalSeconds = Math.floor(diff / 1000);
     const days = Math.floor(totalSeconds / 86400);
     const hours = Math.floor((totalSeconds % 86400) / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
+
     yearCountdownEl.innerText =
       `Noch ${days} Tage ${hours} Std ${minutes} Min ${seconds} Sek bis Jahresende`;
   }
 
+  // =====================
+  // START
+  // =====================
   updateHeader();
   updateButtons();
   updateYearCountdown();
+
   setInterval(() => {
     updateHeader();
     updateButtons();
