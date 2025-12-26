@@ -69,10 +69,15 @@ function showDailyQuote() {
 
 // Persönliche Zitate
 function showPersonal(cat) {
-  if(!quotesData) return;
-  const q = quotesData.personal[cat][0];
+  if (!quotesData) return;
+
+  const dayIndex = getDayOfYear();
+  const list = quotesData.personal[cat];
+  const q = list[dayIndex % list.length];
+
   personalEl.innerText = q;
   personalEl.style.display = "block";
+
   saveToArchive(cat, q);
 }
 
@@ -80,9 +85,18 @@ function showPersonal(cat) {
 function saveToArchive(type, text) {
   const today = new Date().toLocaleDateString("de-DE");
   let archive = JSON.parse(localStorage.getItem("archive")) || [];
-  archive.unshift({date: today, type, text});
-  localStorage.setItem("archive", JSON.stringify(archive));
+
+  // Prüfen: existiert dieser Eintrag heute schon?
+  const exists = archive.some(
+    item => item.date === today && item.type === type
+  );
+
+  if (!exists) {
+    archive.unshift({ date: today, type, text });
+    localStorage.setItem("archive", JSON.stringify(archive));
+  }
 }
+
 
 // Archiv anzeigen
 function openArchive() {
@@ -128,6 +142,11 @@ setInterval(()=>{
   updateHeader();
   updateButtons();
 },1000);
+
+morningBtn.onclick = () => showPersonal("morning");
+noonBtn.onclick = () => showPersonal("noon");
+eveningBtn.onclick = () => showPersonal("evening");
+
 
 function updateYearCountdown() {
   const now = new Date();
