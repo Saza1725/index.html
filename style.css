@@ -1,54 +1,22 @@
-body {
-  margin: 0;
-  font-family: Georgia, serif;
-  background: url('Polar.jpg') center/cover fixed;
-  color: white;
-  text-align: center;
+#menuButton {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 2em;
+  z-index: 1000;
+  cursor: pointer;
 }
 
-header {
-  margin-top: 15px;
-}
-
-#daytime, #weekday, #date {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin-bottom: 3px;
-}
-
-#quote {
-  margin: 40px auto;
-  max-width: 80%;
-  font-size: 1.6em;
-  padding: 20px;
-  background: rgba(0,0,0,0.35);
-  border-radius: 15px;
-}
-
-#buttons {
-  margin-top: 20px;
-}
-
-button {
-  margin: 5px;
-  padding: 10px 15px;
-  background: rgba(0,0,0,0.5);
-  color: white;
-  border: none;
-  border-radius: 6px;
-}
-
-button:disabled {
-  opacity: 0.4;
-}
-
-#personalQuote {
-  margin: 30px auto;
-  max-width: 70%;
-  font-size: 1.2em;
-  background: rgba(0,0,0,0.45);
-  border-radius: 12px;
-  display: none;
+#menu {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  padding-top: 60px;
+  transition: right 0.4s ease;
+  z-index: 999;
 }
 
 #archive {
@@ -57,17 +25,10 @@ button:disabled {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.95);
+  background: rgba(0,0,0,0.98);
   color: white;
   overflow-y: auto;
   display: none;
   padding: 20px;
+  z-index: 1000;
 }
-
-.archiveItem {
-  margin-bottom: 15px;
-  background: rgba(0,0,0,0.35);
-  padding: 12px;
-  border-radius: 10px;
-}
-
