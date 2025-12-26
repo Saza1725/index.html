@@ -10,17 +10,33 @@ fetch("quotes.json")
   })
   .catch(err => console.error("Fehler beim Laden der Zitate:", err));
 
-const quoteEl = document.getElementById("quote");
-const personalEl = document.getElementById("personalQuote");
-const countdownEl = document.getElementById("countdown");
-const morningBtn = document.getElementById("morningBtn");
-const noonBtn = document.getElementById("noonBtn");
-const eveningBtn = document.getElementById("eveningBtn");
-const archiveSection = document.getElementById("archive");
-const archiveList = document.getElementById("archiveList");
-const menuButton = document.getElementById("menuButton");
+document.addEventListener("DOMContentLoaded", () => {
 
-let quotesData = null;
+  const quoteEl = document.getElementById("quote");
+  const personalEl = document.getElementById("personalQuote");
+  const morningBtn = document.getElementById("morningBtn");
+  const noonBtn = document.getElementById("noonBtn");
+  const eveningBtn = document.getElementById("eveningBtn");
+  const archiveOverlay = document.getElementById("archiveOverlay");
+  const archiveList = document.getElementById("archiveList");
+  const closeArchiveBtn = document.getElementById("closeArchiveBtn");
+  const menuButton = document.getElementById("menuButton");
+
+  let quotesData = null;
+
+  fetch("quotes.json")
+    .then(res => res.json())
+    .then(data => {
+      quotesData = data;
+      showDailyQuote();
+    })
+    .catch(() => quoteEl.innerText = "Fehler beim Laden");
+
+  // ⬇️ alle Funktionen hier (getDayOfYear, showDailyQuote, etc.)
+
+  closeArchiveBtn.onclick = closeArchive;
+});
+
 
 // Zitate laden
 fetch("quotes.json")
@@ -110,12 +126,13 @@ function openArchive() {
   });
 }
 
-const archiveOverlay = document.getElementById("archiveOverlay");
-const closeArchiveBtn = document.getElementById("closeArchiveBtn");
+document.addEventListener("DOMContentLoaded", () => {
 
-function openArchive() {
-  archiveOverlay.style.display = "block";
-  archiveList.innerHTML = "";
+  // 👉 DEIN KOMPLETTER JS-CODE KOMMT HIER REIN
+
+});
+
+const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
   const archive = JSON.parse(localStorage.getItem("archive")) || [];
 
@@ -151,9 +168,6 @@ menuButton.onclick = () => {
 };
 
 // Menü-Links
-document.getElementById("archiveLink").onclick = () => { openArchive(); menu.style.right="-260px"; };
-document.getElementById("homeLink").onclick = () => { closeArchive(); menu.style.right="-260px"; };
-
 document.getElementById("archiveLink").onclick = () => {
   openArchive();
   document.getElementById("menu").style.right = "-260px";
