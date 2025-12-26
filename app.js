@@ -44,6 +44,25 @@ document.addEventListener("DOMContentLoaded", () => {
 </ul>
 `;
 
+function initArchiveMonths() {
+  let archive = JSON.parse(localStorage.getItem("archive")) || {};
+
+  const start = new Date(2025, 11, 27); // 27.12.2025
+  const end = new Date(2026, 11, 31);   // 31.12.2026
+
+  let current = new Date(start.getFullYear(), start.getMonth(), 1);
+
+  while (current <= end) {
+    const key = `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, "0")}`;
+    if (!archive[key]) archive[key] = [];
+    current.setMonth(current.getMonth() + 1);
+  }
+
+  localStorage.setItem("archive", JSON.stringify(archive));
+}
+
+initArchiveMonths();
+
   let quotesData = null;
 
   // =====================
@@ -85,6 +104,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
+  
+  function formatMonthName(key) {
+  const [year, month] = key.split("-");
+  const date = new Date(year, month - 1);
+  return date.toLocaleDateString("de-DE", { month: "long", year: "numeric" });
+}
 
   // =====================
   // TAGESZITAT
@@ -105,38 +130,75 @@ document.addEventListener("DOMContentLoaded", () => {
     const q = list[getDayOfYear() % list.length];
     personalEl.innerText = q;
     personalEl.style.display = "block";
-    saveToArchive(type, q);
+    saveDailyQuoteToArchive(text);
   }
 
   // =====================
   // ARCHIV
   // =====================
-  function saveToArchive(type, text) {
-    const today = new Date().toLocaleDateString("de-DE");
-    let archive = JSON.parse(localStorage.getItem("archive")) || [];
+  function saveDailyQuoteToArchive(text) {
+  const now = new Date();
+  const startDate = new Date(2025, 11, 27);
+  if (now < startDate) return;
 
-    if (!archive.some(i => i.date === today && i.type === type)) {
-      archive.unshift({ date: today, type, text });
-      localStorage.setItem("archive", JSON.stringify(archive));
-    }
+  const dateStr = now.toLocaleDateString("de-DE");
+  const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+  let archive = JSON.parse(localStorage.getItem("archive")) || {};
+  if (!archive[monthKey]) archive[monthKey] = [];
+
+  if (!archive[monthKey].some(e => e.date === dateStr)) {
+    archive[monthKey].push({ date: dateStr, text });
+    localStorage.setItem("archive", JSON.stringify(archive));
   }
+}
 
   function openArchive() {
-    archiveOverlay.style.display = "flex";
-    archiveList.innerHTML = "";
+  archiveOverlay.style.display = "flex";
+  archiveList.innerHTML = "";
 
-    const archive = JSON.parse(localStorage.getItem("archive")) || [];
-    archive.forEach(item => {
-      const div = document.createElement("div");
-      div.className = "archiveItem";
-      div.innerHTML = `<strong>${item.date} · ${item.type}</strong><br>${item.text}`;
-      archiveList.appendChild(div);
-    });
-  }
+  const archive = JSON.parse(localStorage.getItem("archive")) || {};
+  const months = Object.keys(archive).sort().reverse();
 
-  function closeArchive() {
-    archiveOverlay.style.display = "none";
-  }
+  let currentYear = "";
+
+  months.forEach(monthKey => {
+    const year = monthKey.split("-")[0];
+
+    if (year !== currentYear) {
+      const y = document.createElement("h2");
+      y.innerText = year;
+      y.style.marginTop = "25px";
+      archiveList.appendChild(y);
+      currentYear = year;
+    }
+
+    const monthTitle = document.createElement("h3");
+    monthTitle.innerText = formatMonthName(monthKey);
+    archiveList.appendChild(monthTitle);
+
+    if (archive[monthKey].length === 0) {
+      const empty = document.createElement("div");
+      empty.style.opacity = "0.5";
+      empty.innerText = "– noch keine Einträge –";
+      archiveList.appendChild(empty);
+    } else {
+      archive[monthKey].forEach(entry => {
+        const div = document.createElement("div");
+        div.className = "archiveItem";
+        div.innerHTML = `<div class="date">${entry.date}</div>${entry.text}`;
+        archiveList.appendChild(div);
+      });
+    }
+  });
+  
+  document.getElementById("archiveSearch").addEventListener("input", function () {
+  const query = this.value.trim();
+  document.querySelectorAll(".archiveItem").forEach(item => {
+    item.style.display = item.innerText.includes(query) ? "block" : "none";
+  });
+});
+}
 
   // =====================
   // PERSÖNLICHES OVERLAY
