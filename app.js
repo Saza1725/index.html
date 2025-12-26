@@ -97,7 +97,6 @@ function saveToArchive(type, text) {
   }
 }
 
-
 // Archiv anzeigen
 function openArchive() {
   archiveSection.style.display = "block";
@@ -111,9 +110,30 @@ function openArchive() {
   });
 }
 
-function closeArchive() {
-  archiveSection.style.display = "none";
+const archiveOverlay = document.getElementById("archiveOverlay");
+const closeArchiveBtn = document.getElementById("closeArchiveBtn");
+
+function openArchive() {
+  archiveOverlay.style.display = "block";
+  archiveList.innerHTML = "";
+
+  const archive = JSON.parse(localStorage.getItem("archive")) || [];
+
+  archive.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "archiveItem";
+    div.innerHTML = `
+      <div class="date">${item.date} · ${item.type}</div>
+      <div>${item.text}</div>
+    `;
+    archiveList.appendChild(div);
+  });
 }
+
+function closeArchive() {
+  archiveOverlay.style.display = "none";
+}
+
 
 // Buttons aktivieren je nach Tageszeit
 function updateButtons() {
@@ -133,6 +153,19 @@ menuButton.onclick = () => {
 // Menü-Links
 document.getElementById("archiveLink").onclick = () => { openArchive(); menu.style.right="-260px"; };
 document.getElementById("homeLink").onclick = () => { closeArchive(); menu.style.right="-260px"; };
+
+document.getElementById("archiveLink").onclick = () => {
+  openArchive();
+  document.getElementById("menu").style.right = "-260px";
+};
+
+document.getElementById("homeLink").onclick = () => {
+  closeArchive();
+  document.getElementById("menu").style.right = "-260px";
+};
+
+closeArchiveBtn.onclick = closeArchive;
+
 
 // Start & Intervalle
 updateHeader();
