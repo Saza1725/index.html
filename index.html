@@ -8,14 +8,15 @@
 </head>
 <body>
 
+  <!-- MENÜ -->
   <div id="menuButton">☰</div>
-
   <nav id="menu">
     <a href="#" id="homeLink">Heute</a>
     <a href="#" id="personalLink">Persönlich</a>
     <a href="#" id="archiveLink">Archiv</a>
   </nav>
 
+  <!-- HEADER -->
   <header id="header">
     <div id="daytime"></div>
     <div id="weekday"></div>
@@ -23,6 +24,7 @@
     <div id="time"></div>
   </header>
 
+  <!-- MAIN CONTENT -->
   <main id="main">
     <div id="quote">Lädt...</div>
     <div id="yearCountdown"></div>
@@ -36,20 +38,21 @@
     <div id="personalQuote"></div>
   </main>
 
+  <!-- ARCHIV -->
   <div id="archiveOverlay">
     <div id="archiveHeader">
       <span>Archiv</span>
       <button id="closeArchiveBtn">✕</button>
     </div>
-    <input
-  type="text"
-  id="archiveSearch"
-  placeholder="Datum suchen (TT.MM.JJJJ)"
-  style="width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:none;"
->
+    <div id="archiveSearchContainer">
+      <input type="date" id="searchDate">
+      <button id="searchBtn">Suchen</button>
+    </div>
+    <div id="searchResult" style="margin-top:15px; font-weight:bold;"></div>
     <div id="archiveList"></div>
   </div>
 
+  <!-- PERSÖNLICHER BEREICH -->
   <div id="personalOverlay">
     <div id="personalHeader">
       <span>Persönlich</span>
