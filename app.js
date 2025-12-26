@@ -26,6 +26,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const yearCountdownEl = document.getElementById("yearCountdown");
 
   let quotesData = null;
+  
+  const personalText = `
+<h2>Mein persönlicher Bereich</h2>
+
+<p>
+Das hier ist mein persönlicher Text.
+Nur ich als Ersteller ändere ihn.
+</p>
+
+<p>
+Gedanken, Regeln, Motivation, Vision –
+alles bleibt hier fest bestehen.
+</p>
+
+<ul>
+  <li>✔ unveränderbar</li>
+  <li>✔ strukturiert</li>
+  <li>✔ nur vom Ersteller gepflegt</li>
+</ul>
+`;
 
   // =====================
   // ZITATE LADEN
