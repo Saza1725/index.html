@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* ================== DOM ================== */
   const morningBtn = document.getElementById("morningBtn");
   const noonBtn = document.getElementById("noonBtn");
   const eveningBtn = document.getElementById("eveningBtn");
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  /* ================== MENU ================== */
+  /* MENU */
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
@@ -39,17 +38,16 @@ document.addEventListener("DOMContentLoaded", () => {
     link.onclick = () => { menu.style.right = "-260px"; menuOpen = false; };
   });
 
-  /* ================== INFO OVERLAY ================== */
+  /* INFO OVERLAY */
   function showInfo() {
     infoOverlay.style.display = "flex";
     infoOverlay.classList.add("slideIn");
   }
   infoLink.onclick = showInfo;
   closeInfoBtn.onclick = () => infoOverlay.style.display = "none";
-  // Info sofort beim Laden anzeigen
   showInfo();
 
-  /* ================== HEADER ================== */
+  /* HEADER */
   function getCategory() {
     const h = new Date().getHours();
     return h >= 6 && h < 12 ? "Morgen" : h < 18 ? "Mittag" : "Abend";
@@ -63,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
 
-  /* ================== BUTTONS ================== */
+  /* BUTTONS */
   function updateButtons() {
     const h = new Date().getHours();
     morningBtn.disabled = !(h>=6 && h<12);
@@ -71,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     eveningBtn.disabled = !(h>=18 || h<6);
   }
 
-  /* ================== ZITATE ================== */
+  /* ZITATE */
   fetch("quotes.json")
     .then(res => res.json())
     .then(data => { quotesData = data; })
@@ -86,13 +84,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function showPersonalQuote(type) {
     if(!quotesData) return;
     let list = quotesData.personal[type];
-    alert(list[getDayOfYear()%list.length]); // nur zur Demo, kann in Overlay angezeigt werden
+    alert(list[getDayOfYear()%list.length]); // Anzeige im Overlay möglich
   }
   morningBtn.onclick = () => showPersonalQuote("morning");
   noonBtn.onclick = () => showPersonalQuote("noon");
   eveningBtn.onclick = () => showPersonalQuote("evening");
 
-  /* ================== PERSÖNLICHER BEREICH ================== */
+  /* PERSÖNLICH */
   personalLink.onclick = () => {
     personalOverlay.style.display = "flex";
     renderPersonal();
@@ -133,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     personalContent.appendChild(quoteSection);
   }
 
-  /* ================== LADEN NOTES & WOCHENZITAT ================== */
+  /* LADEN NOTES & WOCHENZITAT */
   fetch("notes.json")
     .then(res=>res.json())
     .then(data=>{ personalNotes = data.notes || []; })
@@ -144,16 +142,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data=>{ personalWeeklyQuote = data.weeklyQuote || ""; })
     .catch(()=>{ personalWeeklyQuote=""; });
 
-  /* ================== ARCHIV ================== */
-  const months = [];
-  function showMonths() {
-    monthsContainer.innerHTML="";
+  /* ARCHIV */
+  function showArchive() {
+    archiveOverlay.style.display="flex";
     monthDetail.innerHTML="";
-    backBtn.style.display="none";
-    // Tägliche und persönliche Zitate anzeigen
     const dailyDiv = document.createElement("div");
     dailyDiv.innerHTML="<h3>Tägliche Zitate</h3>";
-    quotesData.daily.forEach((q,i)=>{
+    quotesData.daily.forEach(q=>{
       const div=document.createElement("div");
       div.className="archiveItem";
       div.innerText=q;
@@ -164,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const personalDiv=document.createElement("div");
     personalDiv.innerHTML="<h3>Persönliche Zitate</h3>";
     ["morning","noon","evening"].forEach(type=>{
-      quotesData.personal[type].forEach((q,i)=>{
+      quotesData.personal[type].forEach(q=>{
         const div=document.createElement("div");
         div.className="archiveItem";
         div.innerText=`${type.charAt(0).toUpperCase()+type.slice(1)}: ${q}`;
@@ -173,14 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     monthDetail.appendChild(personalDiv);
   }
-  archiveLink.onclick=()=>{
-    archiveOverlay.style.display="flex";
-    showMonths();
-  };
-  closeArchiveBtn.onclick=()=>archiveOverlay.style.display="none";
-  backBtn.onclick=showMonths;
 
-  /* ================== START ================== */
+  archiveLink.onclick=showArchive;
+  closeArchiveBtn.onclick=()=>archiveOverlay.style.display="none";
+  backBtn.onclick=showArchive;
+
+  /* START */
   updateHeader();
   updateButtons();
   setInterval(()=>{ updateHeader(); updateButtons(); },1000);
