@@ -1,27 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* ================== DOM ================== */
   const morningBtn = document.getElementById("morningBtn");
   const noonBtn = document.getElementById("noonBtn");
   const eveningBtn = document.getElementById("eveningBtn");
 
   const menuButton = document.getElementById("menuButton");
   const menu = document.getElementById("menu");
+
   const homeLink = document.getElementById("homeLink");
   const personalLink = document.getElementById("personalLink");
   const archiveLink = document.getElementById("archiveLink");
   const infoLink = document.getElementById("infoLink");
+
+  const infoOverlay = document.getElementById("infoOverlay");
+  const infoContent = document.getElementById("infoContent");
 
   const personalOverlay = document.getElementById("personalOverlay");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
   const personalContent = document.getElementById("personalContent");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
-  const monthDetail = document.getElementById("monthDetail");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
-
-  const infoOverlay = document.getElementById("infoOverlay");
-  const infoContent = document.getElementById("infoContent");
+  const monthDetail = document.getElementById("monthDetail");
 
   const yearCountdownEl = document.getElementById("yearCountdown");
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  /* ================== MENU ================== */
+  /* MENU */
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
@@ -43,32 +43,27 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   });
 
-  /* ================== INFO OVERLAY ================== */
+  /* INFO OVERLAY */
   function showInfo() {
     infoOverlay.style.display = "flex";
     infoOverlay.classList.remove("slideOut");
-    infoOverlay.classList.remove("slideIn");
-    void infoOverlay.offsetWidth;
     infoOverlay.classList.add("slideIn");
   }
 
-  infoLink.onclick = showInfo;
-
-  infoContent.onclick = () => {
+  function hideInfo() {
     infoOverlay.classList.remove("slideIn");
     infoOverlay.classList.add("slideOut");
-    setTimeout(() => {
-      infoOverlay.style.display = "none";
-      infoOverlay.classList.remove("slideOut");
-    }, 600);
-  };
+    setTimeout(() => infoOverlay.style.display = "none", 600);
+  }
 
+  infoContent.onclick = hideInfo;
+  infoLink.onclick = showInfo;
   showInfo();
 
-  /* ================== HEADER ================== */
+  /* HEADER */
   function getCategory() {
     const h = new Date().getHours();
-    return h >= 6 && h < 12 ? "Morgen" : h < 18 ? "Mittag" : "Abend";
+    return h < 12 ? "Morgen" : h < 18 ? "Mittag" : "Abend";
   }
 
   function updateHeader() {
@@ -82,21 +77,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateYearCountdown() {
     const now = new Date();
-    const end = new Date(now.getFullYear(),11,31,23,59,59);
+    const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
     const diff = end - now;
     if (diff <= 0) return;
-
-    const sec = Math.floor(diff / 1000);
-    const d = Math.floor(sec / 86400);
-    const h = Math.floor((sec % 86400) / 3600);
-    const m = Math.floor((sec % 3600) / 60);
-    const s = sec % 60;
-
+    const s = Math.floor(diff / 1000);
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
     yearCountdownEl.innerText =
-      `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
+      `Noch ${d} Tage ${h} Std ${m} Min ${sec} Sek bis Jahresende`;
   }
 
-  /* ================== BUTTONS ================== */
   function updateButtons() {
     const h = new Date().getHours();
     morningBtn.disabled = !(h >= 6 && h < 12);
@@ -104,10 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
     eveningBtn.disabled = !(h >= 18 || h < 6);
   }
 
-  /* ================== ZITATE ================== */
+  /* ZITATE */
   fetch("quotes.json")
-    .then(res => res.json())
-    .then(data => quotesData = data);
+    .then(r => r.json())
+    .then(d => quotesData = d);
 
   function getDayOfYear() {
     const now = new Date();
@@ -117,102 +109,57 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showPersonalQuote(type) {
     if (!quotesData) return;
-    const list = quotesData.personal[type];
-    alert(list[getDayOfYear() % list.length]);
+    alert(quotesData.personal[type][getDayOfYear() % quotesData.personal[type].length]);
   }
 
   morningBtn.onclick = () => showPersonalQuote("morning");
   noonBtn.onclick = () => showPersonalQuote("noon");
   eveningBtn.onclick = () => showPersonalQuote("evening");
 
-  /* ================== PERSÖNLICH ================== */
+  /* PERSONAL */
   personalLink.onclick = () => {
-    personalOverlay.style.display = "flex";
+    personalOverlay.style.display = "block";
     renderPersonal();
   };
-
-  closePersonalBtn.onclick = () => {
-    personalOverlay.style.display = "none";
-  };
+  closePersonalBtn.onclick = () => personalOverlay.style.display = "none";
 
   function renderPersonal() {
-    personalContent.innerHTML = "";
-
-    const notes = document.createElement("div");
-    notes.innerHTML = "<h3>Meine Notizen</h3>";
-    personalNotes.forEach(n => {
-      const d = document.createElement("div");
-      d.className = "note";
-      d.innerText = n;
-      notes.appendChild(d);
-    });
-    personalContent.appendChild(notes);
-
-    const quote = document.createElement("div");
-    quote.innerHTML = "<h3>Zitat der Woche</h3>";
-    if (personalWeeklyQuote) {
-      const d = document.createElement("div");
-      d.className = "quoteBox";
-      d.innerText = personalWeeklyQuote;
-      quote.appendChild(d);
-    }
-    personalContent.appendChild(quote);
+    personalContent.innerHTML = `
+      <div class="personalSection">
+        <h3>Meine Notizen</h3>
+        ${personalNotes.map(n => `<div class="note">${n}</div>`).join("") || "<p>Keine Notizen</p>"}
+      </div>
+      <div class="personalSection">
+        <h3>Zitat der Woche</h3>
+        ${personalWeeklyQuote ? `<div class="quoteBox">${personalWeeklyQuote}</div>` : "<p>Kein Zitat</p>"}
+      </div>
+    `;
   }
 
-  fetch("notes.json")
-    .then(res => res.json())
-    .then(data => personalNotes = data.notes || []);
+  fetch("notes.json").then(r=>r.json()).then(d=>personalNotes=d.notes||[]);
+  fetch("weeklyQuote.json").then(r=>r.json()).then(d=>personalWeeklyQuote=d.weeklyQuote||"");
 
-  fetch("weeklyQuote.json")
-    .then(res => res.json())
-    .then(data => personalWeeklyQuote = data.weeklyQuote || "");
-
-  /* ================== ARCHIV ================== */
+  /* ARCHIV */
   archiveLink.onclick = () => {
-    archiveOverlay.style.display = "flex";
-    showArchive();
-  };
-
-  closeArchiveBtn.onclick = () => {
-    archiveOverlay.style.display = "none";
-  };
-
-  function showArchive() {
+    archiveOverlay.style.display = "block";
     if (!quotesData) return;
-    monthDetail.innerHTML = "";
+    monthDetail.innerHTML = `
+      <h3>Tägliche Zitate</h3>
+      ${quotesData.daily.map(q=>`<div class="archiveItem">${q}</div>`).join("")}
+      <h3>Persönliche Zitate</h3>
+      ${["morning","noon","evening"].flatMap(t =>
+        quotesData.personal[t].map(q=>`<div class="archiveItem">${t}: ${q}</div>`)
+      ).join("")}
+    `;
+  };
+  closeArchiveBtn.onclick = () => archiveOverlay.style.display = "none";
 
-    const daily = document.createElement("div");
-    daily.innerHTML = "<h3>Tägliche Zitate</h3>";
-    quotesData.daily.forEach(q => {
-      const d = document.createElement("div");
-      d.className = "archiveItem";
-      d.innerText = q;
-      daily.appendChild(d);
-    });
-    monthDetail.appendChild(daily);
-
-    const personal = document.createElement("div");
-    personal.innerHTML = "<h3>Persönliche Zitate</h3>";
-    ["morning","noon","evening"].forEach(t => {
-      quotesData.personal[t].forEach(q => {
-        const d = document.createElement("div");
-        d.className = "archiveItem";
-        d.innerText = `${t}: ${q}`;
-        personal.appendChild(d);
-      });
-    });
-    monthDetail.appendChild(personal);
-  }
-
-  /* ================== START ================== */
   updateHeader();
   updateButtons();
   updateYearCountdown();
-
   setInterval(() => {
     updateHeader();
     updateButtons();
     updateYearCountdown();
   }, 1000);
-
 });
