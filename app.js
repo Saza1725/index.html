@@ -20,8 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("backBtn");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
-  const infoOverlay = document.getElementById("infoOverlay");
-  const closeInfoBtn = document.getElementById("closeInfoBtn");
+  // INFO OVERLAY
+const infoOverlay = document.getElementById("infoOverlay");
+const closeInfoBtn = document.getElementById("closeInfoBtn");
+
+// Overlay immer anzeigen, wenn Seite geladen wird
+infoOverlay.style.display = "block";
+
+closeInfoBtn.onclick = () => {
+  infoOverlay.style.display = "none";
+};
 
   let menuOpen = false;
   let quotesData = null;
