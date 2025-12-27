@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  // MENU
+  // MENU TOGGLE
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     yearCountdownEl.innerText = `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
-  // ZITATE
+  // TÄGLICHE ZITATE
   fetch("quotes.json")
     .then(res=>res.json())
     .then(data=>{ quotesData=data; showDailyQuote(); })
@@ -102,7 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // PERSÖNLICHER BEREICH
-  personalLink.onclick = ()=>{ personalOverlay.style.display="flex"; renderPersonal(); };
+  personalLink.onclick = ()=>{ 
+    personalOverlay.style.display="flex"; 
+    renderPersonal(); 
+  };
   closePersonalBtn.onclick = ()=>{ personalOverlay.style.display="none"; };
 
   function renderPersonal(){
@@ -151,38 +154,67 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(()=>{ personalWeeklyQuote=""; });
 
   // ARCHIV
-  function showMonths(){ monthsContainer.innerHTML=""; monthDetail.style.display="none"; backBtn.style.display="none";
-    const btn=document.createElement("button"); btn.innerText="Unsere Gemeinsame Motivation"; btn.onclick=showMonthDetail; monthsContainer.appendChild(btn);
+  function showMonths(){
+    monthsContainer.innerHTML="";
+    monthDetail.style.display="none";
+    backBtn.style.display="none";
+
+    const btn = document.createElement("button");
+    btn.innerText="Unsere Gemeinsame Motivation";
+    btn.onclick = showMonthDetail;
+    monthsContainer.appendChild(btn);
   }
+
   function showMonthDetail(){
-    monthsContainer.innerHTML=""; backBtn.style.display="block"; monthDetail.style.display="block";
+    monthsContainer.innerHTML="";
+    backBtn.style.display="block";
+    monthDetail.style.display="block";
     monthDetail.innerHTML="<h3>Archiv</h3>";
-    if(quotesData){
-      const dailySection=document.createElement("div"); dailySection.innerHTML="<h4>Tägliche Zitate</h4>";
-      quotesData.daily.forEach(q=>{ const d=document.createElement("div"); d.classList.add("archiveItem"); d.innerText=q; dailySection.appendChild(d); });
-      monthDetail.appendChild(dailySection);
 
-      ["morning","noon","evening"].forEach(t=>{
-        const sec=document.createElement("div"); sec.innerHTML=`<h4>${t.charAt(0).toUpperCase()+t.slice(1)} Zitate</h4>`;
-        quotesData.personal[t].forEach(q=>{ const d=document.createElement("div"); d.classList.add("archiveItem"); d.innerText=q; sec.appendChild(d); });
-        monthDetail.appendChild(sec);
+    if(!quotesData) return;
+
+    // Tägliche Zitate
+    const dailySection = document.createElement("div");
+    dailySection.innerHTML="<h4>Tägliche Zitate</h4>";
+    quotesData.daily.forEach(q=>{
+      const d = document.createElement("div");
+      d.classList.add("archiveItem");
+      d.innerText = q;
+      dailySection.appendChild(d);
+    });
+    monthDetail.appendChild(dailySection);
+
+    // Persönliche Zitate
+    ["morning","noon","evening"].forEach(t=>{
+      const sec = document.createElement("div");
+      sec.innerHTML = `<h4>${t.charAt(0).toUpperCase()+t.slice(1)} Zitate</h4>`;
+      quotesData.personal[t].forEach(q=>{
+        const d = document.createElement("div");
+        d.classList.add("archiveItem");
+        d.innerText = q;
+        sec.appendChild(d);
       });
-    }
+      monthDetail.appendChild(sec);
+    });
   }
 
-  archiveLink.onclick=()=>{ archiveOverlay.style.display="flex"; showMonths(); };
-  closeArchiveBtn.onclick=()=>{ archiveOverlay.style.display="none"; };
-  backBtn.onclick=showMonths;
+  archiveLink.onclick = ()=>{ archiveOverlay.style.display="flex"; showMonths(); };
+  closeArchiveBtn.onclick = ()=>{ archiveOverlay.style.display="none"; };
+  backBtn.onclick = showMonths;
 
   // INFO OVERLAY
   function showInfoOverlay(){ infoOverlay.classList.add("show"); }
-  closeInfoBtn.onclick=()=>{ infoOverlay.classList.remove("show"); }
+  closeInfoBtn.onclick = ()=>{ infoOverlay.classList.remove("show"); }
   showInfoOverlay();
 
   const infoLink = document.createElement("a");
   infoLink.href="#";
   infoLink.innerText="Information";
-  infoLink.onclick=(e)=>{ e.preventDefault(); showInfoOverlay(); return false; };
+  infoLink.onclick = (e)=>{
+    e.preventDefault();
+    showInfoOverlay();
+    return false;
+  };
   menu.appendChild(infoLink);
 
   // START
@@ -190,5 +222,4 @@ document.addEventListener("DOMContentLoaded", () => {
   updateButtons();
   updateYearCountdown();
   setInterval(()=>{ updateHeader(); updateButtons(); updateYearCountdown(); },1000);
-
 });
