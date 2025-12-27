@@ -33,6 +33,20 @@ document.addEventListener("DOMContentLoaded", () => {
   let quotesData = null;
   let personalNotes = [];
   let personalWeeklyQuote = "";
+  
+  const weeklyQuoteContent = document.getElementById("weeklyQuoteContent");
+
+function updateWeeklyQuoteUI() {
+  if (!weeklyQuoteContent) return;
+
+  if (personalWeeklyQuote && personalWeeklyQuote.trim() !== "") {
+    weeklyQuoteContent.innerHTML =
+      `<div class="archiveItem">${personalWeeklyQuote}</div>`;
+  } else {
+    weeklyQuoteContent.innerHTML =
+      "<p>Kein Wochenzitat vorhanden.</p>";
+  }
+}
 
   /* ================== MENU ================== */
   menuButton.onclick = () => {
@@ -132,24 +146,30 @@ document.addEventListener("DOMContentLoaded", () => {
     personalOverlay.style.display = "none";
   };
 
-  function renderPersonal() {
-    // Notizen
-    notesEl.innerHTML = "";
-    if (personalNotes.length === 0) {
-      notesEl.innerText = "Keine Notizen vorhanden.";
-    } else {
-      personalNotes.forEach(n => {
-        const div = document.createElement("div");
-        div.className = "archiveItem";
-        div.innerText = n;
-        notesEl.appendChild(div);
-      });
-    }
+  function showPersonalContent() {
+  personalContent.innerHTML = "<h2>Persönlicher Bereich</h2>";
 
-    // Wochenzitat
-    weeklyQuoteEl.innerText =
-      personalWeeklyQuote || "Kein Wochenzitat vorhanden";
+  // NOTIZEN
+  personalContent.innerHTML += "<h3>Meine Notizen</h3>";
+  if (personalNotes.length === 0) {
+    personalContent.innerHTML += "<p>Keine Notizen vorhanden.</p>";
+  } else {
+    personalNotes.forEach(n => {
+      personalContent.innerHTML += `<div class="archiveItem">${n}</div>`;
+    });
   }
+
+  // WOCHENZITAT
+  personalContent.innerHTML += "<h3>Zitat der Woche</h3>";
+  if (personalWeeklyQuote) {
+    personalContent.innerHTML +=
+      `<div class="archiveItem">${personalWeeklyQuote}</div>`;
+  } else {
+    personalContent.innerHTML +=
+      "<p>Kein Wochenzitat vorhanden.</p>";
+  }
+}
+ 
 
   /* ================== NOTIZEN ================== */
   fetch("notes.json")
@@ -163,13 +183,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================== WOCHENZITAT ================== */
   fetch("weeklyQuote.json")
-    .then(res => res.json())
-    .then(data => {
-      personalWeeklyQuote = data.text || "";
-    })
-    .catch(() => {
-      personalWeeklyQuote = "";
-    });
+  .then(res => {
+    if (!res.ok) throw new Error("weeklyQuote.json fehlt");
+    return res.json();
+  })
+  .then(data => {
+    personalWeeklyQuote = data.text || "";
+    updateWeeklyQuoteUI();
+  })
+  .catch(() => {
+    personalWeeklyQuote = "";
+    updateWeeklyQuoteUI();
+  });
 
   /* ================== ARCHIV ================== */
   const months = [];
