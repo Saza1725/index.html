@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-  /* ======= DOM ======= */
+
+  /* ================== DOM ================== */
   const quoteEl = document.getElementById("quote");
   const personalQuoteEl = document.getElementById("personalQuote");
   const morningBtn = document.getElementById("morningBtn");
@@ -28,13 +29,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  /* ======= MENU ======= */
-  menuButton.onclick = () => { menu.style.right = menuOpen ? "-260px" : "0"; menuOpen = !menuOpen; };
+  /* ================== MENU ================== */
+  menuButton.onclick = () => {
+    menu.style.right = menuOpen ? "-260px" : "0";
+    menuOpen = !menuOpen;
+  };
   [homeLink, personalLink, archiveLink, infoLink].forEach(link => {
     link.onclick = () => { menu.style.right = "-260px"; menuOpen = false; };
   });
 
-  /* ======= HEADER ======= */
+  /* ================== HEADER ================== */
   function getCategory() {
     const h = new Date().getHours();
     return h >= 6 && h < 12 ? "Morgen" : h < 18 ? "Mittag" : "Abend";
@@ -48,12 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
 
-  /* ======= COUNTDOWN ======= */
+  /* ================== COUNTDOWN ================== */
   function updateYearCountdown() {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
     const diff = end - now;
-    if(diff <=0) return;
+    if (diff <= 0) return;
     const sec = Math.floor(diff/1000);
     const d = Math.floor(sec/86400);
     const h = Math.floor((sec%86400)/3600);
@@ -62,11 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
     yearCountdownEl.innerText = `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
-  /* ======= ZITATE ======= */
+  /* ================== ZITATE ================== */
   fetch("quotes.json")
-    .then(res=>res.json())
-    .then(data=>{ quotesData=data; showDailyQuote(); })
-    .catch(()=>{ quoteEl.innerText="Zitate konnten nicht geladen werden."; });
+    .then(res => res.json())
+    .then(data => { quotesData = data; showDailyQuote(); })
+    .catch(() => { quoteEl.innerText = "Zitate konnten nicht geladen werden."; });
 
   function getDayOfYear() {
     const now = new Date();
@@ -76,11 +80,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showDailyQuote() {
     if(!quotesData) return;
-    const index = getDayOfYear()%quotesData.daily.length;
+    const index = getDayOfYear() % quotesData.daily.length;
     quoteEl.innerText = quotesData.daily[index];
   }
 
-  /* ======= ZEITBUTTONS ======= */
+  /* ================== ZEITBUTTONS ================== */
   morningBtn.onclick = () => showPersonalQuote("morning");
   noonBtn.onclick = () => showPersonalQuote("noon");
   eveningBtn.onclick = () => showPersonalQuote("evening");
@@ -92,21 +96,18 @@ document.addEventListener("DOMContentLoaded", () => {
     personalQuoteEl.style.display = "block";
   }
 
-  function updateButtons(){
-    const h=new Date().getHours();
-    morningBtn.disabled=!(h>=6 && h<12);
-    noonBtn.disabled=!(h>=12 && h<18);
-    eveningBtn.disabled=!(h>=18 || h<6);
+  function updateButtons() {
+    const h = new Date().getHours();
+    morningBtn.disabled = !(h>=6 && h<12);
+    noonBtn.disabled = !(h>=12 && h<18);
+    eveningBtn.disabled = !(h>=18 || h<6);
   }
 
-  /* ======= PERSÖNLICHER BEREICH ======= */
-  personalLink.onclick = () => {
-    personalOverlay.style.display="flex";
-    renderPersonal();
-  };
-  closePersonalBtn.onclick = () => { personalOverlay.style.display="none"; };
+  /* ================== PERSÖNLICHER BEREICH ================== */
+  personalLink.onclick = () => { personalOverlay.style.display = "flex"; renderPersonal(); };
+  closePersonalBtn.onclick = () => { personalOverlay.style.display = "none"; };
 
-  function renderPersonal(){
+  function renderPersonal() {
     personalContent.innerHTML = "";
 
     // Notizen
@@ -117,9 +118,9 @@ document.addEventListener("DOMContentLoaded", () => {
       notesSection.innerHTML += "<p>Keine Notizen vorhanden.</p>";
     } else {
       personalNotes.forEach(n=>{
-        const div=document.createElement("div");
+        const div = document.createElement("div");
         div.classList.add("note");
-        div.innerText=n;
+        div.innerText = n;
         notesSection.appendChild(div);
       });
     }
@@ -130,9 +131,9 @@ document.addEventListener("DOMContentLoaded", () => {
     quoteSection.classList.add("personalSection");
     quoteSection.innerHTML = "<h3>Zitat der Woche</h3>";
     if(personalWeeklyQuote){
-      const div=document.createElement("div");
+      const div = document.createElement("div");
       div.classList.add("quoteBox");
-      div.innerText=personalWeeklyQuote;
+      div.innerText = personalWeeklyQuote;
       quoteSection.appendChild(div);
     } else {
       quoteSection.innerHTML += "<p>Kein Wochenzitat vorhanden.</p>";
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     personalContent.appendChild(quoteSection);
   }
 
-  /* ======= LADEN NOTES & WOCHENZITAT ======= */
+  /* ================== LADEN NOTES & WOCHENZITAT ================== */
   fetch("notes.json")
     .then(res=>res.json())
     .then(data=>{ personalNotes=data.notes||[]; })
@@ -151,41 +152,48 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data=>{ personalWeeklyQuote=data.weeklyQuote||""; })
     .catch(()=>{ personalWeeklyQuote=""; });
 
-  /* ======= ARCHIV ======= */
-  const months=[];
+  /* ================== ARCHIV ================== */
+  const months = [];
   for(let y=2025;y<=2026;y++){
     const start=y===2025?12:1;
-    for(let m=start;m<=12;m++) months.push({year:y, month:m});
+    for(let m=start;m<=12;m++) months.push({year:y,month:m});
   }
+
   function showMonths(){
     monthsContainer.innerHTML="";
     monthDetail.style.display="none";
     backBtn.style.display="none";
-    months.forEach(({year, month})=>{
+    months.forEach(({year,month})=>{
       const btn=document.createElement("button");
       btn.innerText=new Date(year,month-1,1).toLocaleDateString("de-DE",{month:"long",year:"numeric"});
-      btn.onclick=()=>showMonthDetail(year, month);
+      btn.onclick=()=>showMonthDetail(year,month);
       monthsContainer.appendChild(btn);
     });
   }
-  function showMonthDetail(year, month){
+
+  function showMonthDetail(year,month){
     monthsContainer.innerHTML="";
     backBtn.style.display="block";
     monthDetail.style.display="block";
     monthDetail.innerHTML=`<h3>${new Date(year,month-1,1).toLocaleDateString("de-DE",{month:"long",year:"numeric"})}</h3>`;
   }
+
   archiveLink.onclick=()=>{ archiveOverlay.style.display="flex"; showMonths(); };
   closeArchiveBtn.onclick=()=>{ archiveOverlay.style.display="none"; };
   backBtn.onclick=showMonths;
 
-  /* ======= INFO OVERLAY ======= */
-  infoOverlay.style.display="block";
-  closeInfoBtn.onclick = () => { infoOverlay.style.display="none"; };
-  infoLink.onclick = () => { infoOverlay.style.display="block"; };
+  /* ================== INFO OVERLAY ================== */
+  function showInfo(){
+    infoOverlay.style.display="flex";
+  }
+  infoLink.onclick=showInfo;
+  closeInfoBtn.onclick=()=>{ infoOverlay.style.display="none"; };
+  showInfo(); // automatisch beim Laden
 
-  /* ======= START ======= */
+  /* ================== START ================== */
   updateHeader();
   updateButtons();
   updateYearCountdown();
-  setInterval(()=>{ updateHeader(); updateButtons(); updateYearCountdown(); },1000);
+  setInterval(()=>{updateHeader();updateButtons();updateYearCountdown();},1000);
+
 });
