@@ -57,6 +57,20 @@ button:disabled { opacity: 0.4; }
   font-weight:bold;
 }
 
+/* HEADER & COUNTDOWN */
+header { margin-top: 15px; }
+#daytime { font-size: 2em; font-weight: bold; }
+#weekday, #date, #time { font-size: 1.2em; font-weight:bold; }
+#yearCountdown {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 10px;
+  display: inline-block;
+  font-weight:bold;
+  color:black;
+}
+
 /* INFO OVERLAY */
 .overlay {
   position: fixed;
@@ -68,7 +82,7 @@ button:disabled { opacity: 0.4; }
   z-index: 10000;
 }
 #infoContent {
-  background: rgba(173,216,230,0.95);
+  background: rgba(173,216,230,0.9);
   padding: 30px;
   border-radius: 15px;
   max-width: 80%;
@@ -78,12 +92,19 @@ button:disabled { opacity: 0.4; }
 #closeInfoBtn { margin-top:15px; padding:8px 12px; font-size:1em; cursor:pointer; }
 
 .slideIn {
-  animation: slideDown 0.7s ease-out forwards;
+  animation: slideDown 0.8s ease-out forwards;
+}
+@keyframes slideDown {
+  0% { transform: translateY(-150%); opacity:0; }
+  100% { transform: translateY(0); opacity:1; }
 }
 
-@keyframes slideDown {
-  0% {transform: translateY(-100%); opacity:0;}
-  100% {transform: translateY(0); opacity:1;}
+/* MAIN CONTENT */
+#dailyMotivationText {
+  margin-top: 15px;
+  font-size: 1.4em;
+  font-weight:bold;
+  color:black;
 }
 
 /* PERSÖNLICHER BEREICH */
