@@ -93,7 +93,7 @@ fetch("weeklyQuote.json")
   })
   .then(data => {
     if (data.text && data.text.trim() !== "") {
-      weeklyQuoteEl.innerText = data.text;
+      weeklyQuoteEl.innerText =text;
     } else {
       weeklyQuoteEl.innerText = "Kein Wochenzitat vorhanden";
     }
