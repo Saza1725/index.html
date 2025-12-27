@@ -75,7 +75,7 @@ button:disabled { opacity: 0.4; }
   z-index: 10000;
 }
 #infoContent {
-  background: rgba(173,216,230,0.95);
+  background: rgba(173,216,230,0.6);
   padding: 30px;
   border-radius: 15px;
   max-width: 80%;
