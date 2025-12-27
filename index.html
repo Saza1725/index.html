@@ -47,29 +47,40 @@
       <span>Archiv</span>
       <button id="closeArchiveBtn">✕</button>
     </div>
-    <button id="backBtn">← Zur Monatsübersicht</button>
-    <div id="monthsContainer"></div>
     <div id="monthDetail"></div>
+    <div id="monthsContainer"></div>
+    <button id="backBtn">← Zur Übersicht</button>
   </div>
 
   <!-- PERSÖNLICHER BEREICH -->
   <div id="personalOverlay">
     <div id="personalHeader">
-      <span>Persönlich</span>
+      <span>Persönlicher Bereich</span>
       <button id="closePersonalBtn">✕</button>
     </div>
     <div id="personalContent"></div>
   </div>
 
   <!-- INFO OVERLAY -->
-  <div id="infoOverlay">
-    <div id="infoBox">
-      <h2>Willkommen!</h2>
-      <p>Auf dieser Seite findest du täglich neue Zitate, persönliche Notizen, Wochenzitate und ein Archiv. Nutze die Menü-Punkte, um durch die Inhalte zu navigieren.</p>
-      <button id="closeInfoBtn">Schließen</button>
+  <div id="infoOverlay" style="display:none;">
+    <div id="personalHeader">
+      <span>Information</span>
+      <button id="closeInfoBtn">✕</button>
+    </div>
+    <div style="padding:20px; text-align:left;">
+      <p>Willkommen auf unserer Motivationsseite! Hier findest du:</p>
+      <ul>
+        <li>Tägliche Zitate, die sich automatisch jeden Tag ändern.</li>
+        <li>Persönliche Zitate für Morgen, Mittag und Abend.</li>
+        <li>Deine eigenen Notizen, die du speichern kannst.</li>
+        <li>Ein wöchentliches Zitat, das im persönlichen Bereich angezeigt wird.</li>
+        <li>Ein Archiv aller Zitate unter „Unsere Gemeinsame Motivation“.</li>
+      </ul>
+      <p>Die Zitate sollen dich motivieren und inspirieren – viel Spaß beim Lesen!</p>
     </div>
   </div>
 
+  <!-- SCRIPT -->
   <script src="app.js"></script>
 </body>
 </html>
