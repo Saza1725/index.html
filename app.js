@@ -71,6 +71,30 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => { quotesData = data; showDailyQuote(); })
     .catch(err => { console.error(err); quoteEl.innerText = "Fehler beim Laden der Zitate"; });
 
+// ======= NOTIZEN LADEN =======
+fetch("notes.json")
+  .then(res => res.json())
+  .then(data => {
+    const notesEl = document.getElementById("notesContent");
+    if (notesEl) notesEl.innerText = data.text;
+  })
+  .catch(() => {
+    const notesEl = document.getElementById("notesContent");
+    if (notesEl) notesEl.innerText = "Keine Notizen vorhanden.";
+  });
+
+// ======= WOCHENZITAT LADEN =======
+fetch("weeklyQuote.json")
+  .then(res => res.json())
+  .then(data => {
+    const weeklyEl = document.getElementById("weeklyQuoteContent");
+    if (weeklyEl) weeklyEl.innerText = data.text;
+  })
+  .catch(() => {
+    const weeklyEl = document.getElementById("weeklyQuoteContent");
+    if (weeklyEl) weeklyEl.innerText = "Kein Wochenzitat vorhanden.";
+  });
+
   // Persönliche Notizen laden
   fetch("notes.json")
     .then(res => res.json())
