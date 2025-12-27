@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   const morningBtn = document.getElementById("morningBtn");
   const noonBtn = document.getElementById("noonBtn");
   const eveningBtn = document.getElementById("eveningBtn");
@@ -15,9 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const personalContent = document.getElementById("personalContent");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
-  const monthsContainer = document.getElementById("monthsContainer");
   const monthDetail = document.getElementById("monthDetail");
-  const backBtn = document.getElementById("backBtn");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
 
   const infoOverlay = document.getElementById("infoOverlay");
@@ -43,13 +40,15 @@ document.addEventListener("DOMContentLoaded", () => {
   /* INFO OVERLAY */
   function showInfo() {
     infoOverlay.style.display = "flex";
+    infoOverlay.classList.remove("slideIn");
+    void infoOverlay.offsetWidth; // reflow für wiederholtes Abspielen
     infoOverlay.classList.add("slideIn");
   }
   infoLink.onclick = showInfo;
   closeInfoBtn.onclick = () => infoOverlay.style.display = "none";
-  showInfo(); // beim Laden direkt einblenden
+  showInfo(); // sofort beim Laden
 
-  /* HEADER */
+  /* HEADER + COUNTDOWN */
   function getCategory() {
     const h = new Date().getHours();
     return h >=6 && h<12 ? "Morgen" : h<18 ? "Mittag" : "Abend";
@@ -62,8 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
     document.getElementById("time").innerText = now.toLocaleTimeString("de-DE");
   }
-
-  /* COUNTDOWN */
   function updateYearCountdown(){
     const now = new Date();
     const end = new Date(now.getFullYear(),11,31,23,59,59);
@@ -115,7 +112,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderPersonal(){
     personalContent.innerHTML="";
-    // Notizen
     const notesSection=document.createElement("div");
     notesSection.classList.add("personalSection");
     notesSection.innerHTML="<h3>Meine Notizen</h3>";
@@ -131,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     personalContent.appendChild(notesSection);
 
-    // Wochenzitat
     const quoteSection=document.createElement("div");
     quoteSection.classList.add("personalSection");
     quoteSection.innerHTML="<h3>Zitat der Woche</h3>";
@@ -160,7 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function showArchive(){
     if(!quotesData) return;
     monthDetail.innerHTML="";
-    backBtn.style.display="none";
     const dailyDiv=document.createElement("div");
     dailyDiv.innerHTML="<h3>Tägliche Zitate</h3>";
     quotesData.daily.forEach(q=>{
