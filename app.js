@@ -84,17 +84,23 @@ fetch("notes.json")
   });
 
 // ======= WOCHENZITAT LADEN =======
+const weeklyQuoteEl = document.getElementById("weeklyQuote");
+
 fetch("weeklyQuote.json")
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) throw new Error("weeklyQuote.json fehlt");
+    return res.json();
+  })
   .then(data => {
-    const weeklyEl = document.getElementById("weeklyQuoteContent");
-    if (weeklyEl) weeklyEl.innerText = data.text;
+    if (data.text && data.text.trim() !== "") {
+      weeklyQuoteEl.innerText = data.text;
+    } else {
+      weeklyQuoteEl.innerText = "Kein Wochenzitat vorhanden";
+    }
   })
   .catch(() => {
-    const weeklyEl = document.getElementById("weeklyQuoteContent");
-    if (weeklyEl) weeklyEl.innerText = "Kein Wochenzitat vorhanden.";
+    weeklyQuoteEl.innerText = "Kein Wochenzitat vorhanden";
   });
-
   // Persönliche Notizen laden
   fetch("notes.json")
     .then(res => res.json())
