@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closePersonalBtn = document.getElementById("closePersonalBtn");
 
   const notesEl = document.getElementById("personalNotesContent");
-  const weeklyQuoteEl = document.getElementById("personalWeeklyQuoteContent");
+  const weeklyQuoteContent = document.getElementById("weeklyQuoteContent");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
   const monthsContainer = document.getElementById("monthsContainer");
