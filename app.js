@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function showInfo() {
   infoOverlay.style.display = "flex";
   infoOverlay.classList.remove("slideIn");
-  void infoOverlay.offsetWidth; // reflow für wiederholtes Abspielen
+  void infoOverlay.offsetWidth; // Reflow für wiederholtes Abspielen
   infoOverlay.classList.add("slideIn");
 }
 
@@ -50,9 +50,11 @@ document.getElementById("infoContent").onclick = () => {
   infoOverlay.style.display = "none";
 };
 
-// Entferne das vorherige closeInfoBtn Verhalten, da das X wegfällt
-// closeInfoBtn.onclick = () => infoOverlay.style.display = "none";
-  showInfo(); // sofort beim Laden
+// Info Overlay sofort beim Laden anzeigen
+showInfo();
+
+// Info Overlay erneut anzeigen, wenn der Menüpunkt geklickt wird
+infoLink.onclick = showInfo;
 
   /* HEADER + COUNTDOWN */
   function getCategory() {
