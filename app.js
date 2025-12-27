@@ -45,32 +45,36 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* ================== INFO OVERLAY ================== */
-  function showInfo() {
-    infoOverlay.style.display = "flex";
+  /* ================== INFO OVERLAY ================== */
+function showInfo() {
+  infoOverlay.style.display = "flex";
+  infoOverlay.classList.remove("slideOut");
+  infoOverlay.classList.remove("slideIn");
+  void infoOverlay.offsetWidth;
+  infoOverlay.classList.add("slideIn");
+}
+
+function hideInfo() {
+  infoOverlay.classList.remove("slideIn");
+  infoOverlay.classList.add("slideOut");
+  setTimeout(() => {
+    infoOverlay.style.display = "none";
     infoOverlay.classList.remove("slideOut");
-    infoOverlay.classList.remove("slideIn");
-    void infoOverlay.offsetWidth; // Reflow
-    infoOverlay.classList.add("slideIn");
-  }
+  }, 600);
+}
 
-  function hideInfo() {
-    infoOverlay.classList.remove("slideIn");
-    infoOverlay.classList.add("slideOut");
-    setTimeout(() => {
-      infoOverlay.style.display = "none";
-      infoOverlay.classList.remove("slideOut");
-    }, 600);
-  }
+/* NUR TEXT klickbar */
+document.querySelector("#infoContent p").onclick = hideInfo;
+document.querySelector("#infoContent h2").onclick = hideInfo;
 
-  infoContent.onclick = hideInfo;
+/* BUTTON klickbar */
+startBtn.onclick = hideInfo;
 
-  startBtn.onclick = (e) => {
-    e.stopPropagation();
-    hideInfo();
-  };
+/* Menü-Link */
+infoLink.onclick = showInfo;
 
-  infoLink.onclick = showInfo;
-  showInfo(); // bei Seitenaufruf
+/* Beim Laden */
+showInfo();
 
   /* ================== HEADER ================== */
   function getCategory() {
