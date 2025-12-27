@@ -109,36 +109,93 @@ document.addEventListener("DOMContentLoaded", () => {
   noonBtn.onclick=()=>showPersonalQuote("noon");
   eveningBtn.onclick=()=>showPersonalQuote("evening");
 
-  /* ===== PERSONAL ===== */
-  personalLink.onclick=()=>{
-    show(personalOverlay);
-    personalContent.innerHTML="";
-    personalNotes.forEach(n=>{
-      const d=document.createElement("div");
-      d.className="note"; d.innerText=n;
-      personalContent.appendChild(d);
-    });
-    if(personalWeeklyQuote){
-      const q=document.createElement("div");
-      q.className="quoteBox"; q.innerText=personalWeeklyQuote;
-      personalContent.appendChild(q);
-    }
-  };
-  closePersonalBtn.onclick=()=>personalOverlay.classList.remove("show");
+/* ================== PERSÖNLICHER BEREICH ================== */
+function renderPersonal() {
+  personalContent.innerHTML = "";
 
-  /* ===== ARCHIV ===== */
-  archiveLink.onclick=()=>{
-    show(archiveOverlay);
-    const d=document.getElementById("monthDetail");
-    d.innerHTML="";
-    quotesData.daily.forEach(q=>{
-      const x=document.createElement("div");
-      x.className="archiveItem"; x.innerText=q;
-      d.appendChild(x);
-    });
-  };
-  closeArchiveBtn.onclick=()=>archiveOverlay.classList.remove("show");
+  // NOTIZEN
+  const notesSection = document.createElement("div");
+  notesSection.className = "personalSection";
 
+  const notesTitle = document.createElement("h3");
+  notesTitle.innerText = "Meine Notizen";
+  notesSection.appendChild(notesTitle);
+
+  if (personalNotes.length === 0) {
+    const p = document.createElement("p");
+    p.innerText = "Keine Notizen vorhanden.";
+    notesSection.appendChild(p);
+  } else {
+    personalNotes.forEach(n => {
+      const div = document.createElement("div");
+      div.className = "note";
+      div.innerText = n;
+      notesSection.appendChild(div);
+    });
+  }
+
+  personalContent.appendChild(notesSection);
+
+  // WOCHENZITAT
+  const quoteSection = document.createElement("div");
+  quoteSection.className = "personalSection";
+
+  const quoteTitle = document.createElement("h3");
+  quoteTitle.innerText = "Zitat der Woche";
+  quoteSection.appendChild(quoteTitle);
+
+  if (personalWeeklyQuote) {
+    const div = document.createElement("div");
+    div.className = "quoteBox";
+    div.innerText = personalWeeklyQuote;
+    quoteSection.appendChild(div);
+  } else {
+    const p = document.createElement("p");
+    p.innerText = "Kein Wochenzitat vorhanden.";
+    quoteSection.appendChild(p);
+  }
+
+  personalContent.appendChild(quoteSection);
+}
+
+/* ================== ARCHIV ================== */
+function showArchive() {
+  if (!quotesData) return;
+  monthDetail.innerHTML = "";
+
+  // Tägliche Zitate
+  const dailyDiv = document.createElement("div");
+  dailyDiv.className = "archiveSection";
+  const dailyTitle = document.createElement("h3");
+  dailyTitle.innerText = "Tägliche Zitate";
+  dailyDiv.appendChild(dailyTitle);
+
+  quotesData.daily.forEach(q => {
+    const div = document.createElement("div");
+    div.className = "archiveItem";
+    div.innerText = q;
+    dailyDiv.appendChild(div);
+  });
+  monthDetail.appendChild(dailyDiv);
+
+  // Persönliche Zitate
+  const personalDiv = document.createElement("div");
+  personalDiv.className = "archiveSection";
+  const personalTitle = document.createElement("h3");
+  personalTitle.innerText = "Persönliche Zitate";
+  personalDiv.appendChild(personalTitle);
+
+  ["morning", "noon", "evening"].forEach(type => {
+    quotesData.personal[type].forEach(q => {
+      const div = document.createElement("div");
+      div.className = "archiveItem";
+      div.innerText = `${type.charAt(0).toUpperCase() + type.slice(1)}: ${q}`;
+      personalDiv.appendChild(div);
+    });
+  });
+
+  monthDetail.appendChild(personalDiv);
+}
   /* ===== START ===== */
   updateHeader();
   updateButtons();
