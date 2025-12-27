@@ -33,187 +33,95 @@ body {
   text-decoration: none;
 }
 
-/* HEADER + COUNTDOWN */
+/* HEADER */
 header {
   margin-top: 40px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
-
-#daytime {
-  font-size: 2.4em;
-  font-weight: bold;
-}
-
-#weekday,
-#date,
-#time {
-  font-size: 1.2em;
-  font-weight: bold;
-}
+#daytime { font-size: 2em; font-weight: bold; }
+#weekday, #date, #time { font-size: 1.2em; font-weight: bold; }
 
 #yearCountdown {
-  margin-top: 18px;
-  padding: 12px 18px;
-  background: rgba(255,255,255,0.55);
-  border-radius: 14px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 12px;
   font-weight: bold;
-  font-size: 1.1em;
-  color: black;
+  display: inline-block;
 }
 
-/* BUTTONS UND TEXT */
-#buttons {
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-}
-
+/* BUTTONS */
+#buttons { margin-top: 40px; }
 button {
-  padding: 12px 22px;
-  background: rgba(0,0,0,0.55);
+  margin: 6px;
+  padding: 12px 18px;
+  background: rgba(0,0,0,0.6);
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: bold;
-  font-size: 1em;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
 }
-
-button:hover {
-  transform: scale(1.06);
-  background: rgba(0,0,0,0.75);
-}
-
-button:disabled {
-  opacity: 0.4;
-}
-
-#timeButtonsText {
-  font-size: 1.3em;
-  font-weight: bold;
-  letter-spacing: 0.5px;
-}
+button:disabled { opacity: 0.4; }
 
 #dailyMotivationText {
-  margin-top: 10px;
+  margin-top: 25px;
   font-size: 1.3em;
   font-weight: bold;
-  color: black;
-  animation: softBlink 2.2s infinite;
-}
-
-@keyframes softBlink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
 }
 
 /* INFO OVERLAY */
 .overlay {
   position: fixed;
   inset: 0;
-  background: url('Polar.jpg') center/cover fixed; /* nur Hintergrund sichtbar */
+  background: url('Polar.jpg') center/cover fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10000;
 }
-
 #infoContent {
-  background: rgba(255,255,255,0.0); /* transparent */
-  padding: 30px;
-  border-radius: 15px;
-  max-width: 80%;
-  text-align: center;
-  font-weight:bold;
-  cursor: pointer; /* klickbar, schließt Overlay */
+  background: rgba(255,255,255,0);
+  font-weight: bold;
+  font-size: 1.4em;
+  cursor: pointer;
 }
 
+/* ANIMATION */
 .slideIn {
   animation: slideDown 0.8s ease-out forwards;
 }
+.slideOut {
+  animation: slideUp 0.6s ease-in forwards;
+}
+
 @keyframes slideDown {
-  0% { transform: translateY(-150%); opacity:0; }
-  100% { transform: translateY(0); opacity:1; }
+  from { transform: translateY(-150%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes slideUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-150%); opacity: 0; }
 }
 
-/* PERSÖNLICHER BEREICH */
-#personalOverlay {
-  position: fixed;
-  inset:0;
-  background: url('Polar.jpg') center/cover fixed;
-  display:none;
-  overflow-y:auto;
-  padding:30px 20px;
-}
-#personalHeader { 
-  display:flex; 
-  justify-content:space-between; 
-  font-size:1.8em; 
-  font-weight:bold; 
-  margin-bottom:20px; 
-}
-#personalContent { font-weight:bold; }
-.personalSection { margin-bottom:20px; }
-.archiveItem, .note, .quoteBox { 
-  font-weight:bold; 
-  background: rgba(255,255,255,0.85); 
-  padding:10px; 
-  border-radius:10px; 
-  margin-bottom:10px; 
-}
-
-/* ARCHIV */
+/* PERSÖNLICH & ARCHIV */
+#personalOverlay,
 #archiveOverlay {
   position: fixed;
   inset: 0;
   background: url('Polar.jpg') center/cover fixed;
-  display:none;
-  padding:30px 20px;
-  overflow-y:auto;
-}
-#archiveHeader { 
-  display:flex; 
-  justify-content:space-between; 
-  font-size:1.8em; 
-  font-weight:bold; 
-  margin-bottom:20px; 
-}
-#monthsContainer { 
-  display:flex; 
-  flex-wrap:wrap; 
-  gap:10px; 
-  margin-bottom:20px; 
-}
-#monthsContainer button { 
-  padding:10px 15px; 
-  font-size:1em; 
-  border-radius:8px; 
-  border:none; 
-  background-color:#007acc; 
-  color:white; 
-  cursor:pointer; 
-}
-#monthDetail { margin-top:20px; }
-#backBtn { 
-  display:none; 
-  padding:8px 12px; 
-  border:none; 
-  border-radius:6px; 
-  background-color:#ff7f50; 
-  color:white; 
-  cursor:pointer; 
-  margin-bottom:15px; 
+  display: none;
+  overflow-y: auto;
+  padding: 30px;
 }
 
-/* MAIN CONTENT – strukturierter Hauptbereich */
-#main {
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
+.archiveItem,
+.note,
+.quoteBox {
+  background: rgba(255,255,255,0.85);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-weight: bold;
 }
