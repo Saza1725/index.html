@@ -19,29 +19,28 @@
     <a href="#" id="archiveLink">Archiv</a>
   </nav>
 
-  <!-- HEADER FIXIERT OBEN -->
+  <!-- HEADER -->
   <header id="header">
     <div id="daytime"></div>
     <div id="weekday"></div>
     <div id="date"></div>
     <div id="time"></div>
+    <div id="yearCountdown"></div>
   </header>
 
-  <!-- TAGESZITAT MITTE -->
-  <div id="personalQuoteDisplay"></div>
-
-  <!-- COUNTDOWN FIXIERT UNTEN RECHTS -->
-  <div id="yearCountdown"></div>
-
-  <!-- MAIN CONTENT FIXIERT UNTEN -->
+  <!-- MAIN CONTENT -->
   <main id="main">
-    <!-- Buttons -->
+    <!-- Tageszitat in der Mitte -->
+    <div id="dailyQuoteDisplay"></div>
+
+    <!-- Buttons unter dem Zitat -->
     <div id="buttons">
       <button id="morningBtn">Morgen</button>
       <button id="noonBtn">Mittag</button>
       <button id="eveningBtn">Abend</button>
     </div>
-    <!-- Animierter Text -->
+
+    <!-- Animierter Text ganz unten -->
     <div id="dailyMotivationText">Hol dir deine Tages-Inspiration!</div>
   </main>
 
@@ -56,20 +55,11 @@
 
   <!-- PERSÖNLICH OVERLAY -->
   <div id="personalOverlay" class="overlay">
-    <div id="personalHeader">
-      <span>Persönlich</span>
-      <button id="closePersonalBtn">✕</button>
-    </div>
     <div id="personalContent"></div>
   </div>
 
   <!-- ARCHIV OVERLAY -->
   <div id="archiveOverlay" class="overlay">
-    <div id="archiveHeader">
-      <span>Archiv</span>
-      <button id="closeArchiveBtn">✕</button>
-    </div>
-    <button id="backBtn">← Zur Übersicht</button>
     <div id="monthsContainer"></div>
     <div id="monthDetail"></div>
   </div>
