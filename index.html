@@ -16,7 +16,7 @@
     <a href="#" id="homeLink">Heute</a>
     <a href="#" id="personalLink">Persönlich</a>
     <a href="#" id="archiveLink">Archiv</a>
-    <a href="#" id="infoLink">Information</a>
+    <!-- Info-Link wird per JS hinzugefügt -->
   </nav>
 
   <!-- HEADER -->
@@ -38,49 +38,39 @@
       <button id="eveningBtn">Abend</button>
     </div>
 
-    <div id="personalQuote" style="display:none;"></div>
+    <div id="personalQuote"></div>
+    <div id="personalContent"></div>
   </main>
 
   <!-- ARCHIV OVERLAY -->
   <div id="archiveOverlay">
     <div id="archiveHeader">
-      <span>Archiv</span>
+      <span>Archiv - Unsere Gemeinsame Motivation</span>
       <button id="closeArchiveBtn">✕</button>
     </div>
-    <div id="monthDetail"></div>
-    <div id="monthsContainer"></div>
     <button id="backBtn">← Zur Übersicht</button>
+    <div id="monthsContainer"></div>
+    <div id="monthDetail"></div>
   </div>
 
   <!-- PERSÖNLICHER BEREICH -->
   <div id="personalOverlay">
     <div id="personalHeader">
-      <span>Persönlicher Bereich</span>
+      <span>Persönlich</span>
       <button id="closePersonalBtn">✕</button>
     </div>
     <div id="personalContent"></div>
   </div>
 
   <!-- INFO OVERLAY -->
-  <div id="infoOverlay" style="display:none;">
-    <div id="personalHeader">
-      <span>Information</span>
-      <button id="closeInfoBtn">✕</button>
-    </div>
-    <div style="padding:20px; text-align:left;">
-      <p>Willkommen auf unserer Motivationsseite! Hier findest du:</p>
-      <ul>
-        <li>Tägliche Zitate, die sich automatisch jeden Tag ändern.</li>
-        <li>Persönliche Zitate für Morgen, Mittag und Abend.</li>
-        <li>Deine eigenen Notizen, die du speichern kannst.</li>
-        <li>Ein wöchentliches Zitat, das im persönlichen Bereich angezeigt wird.</li>
-        <li>Ein Archiv aller Zitate unter „Unsere Gemeinsame Motivation“.</li>
-      </ul>
-      <p>Die Zitate sollen dich motivieren und inspirieren – viel Spaß beim Lesen!</p>
+  <div id="infoOverlay">
+    <div class="infoContent">
+      <h2>Willkommen!</h2>
+      <p>Hier findest du tägliche Motivation, deine persönlichen Notizen und das Zitat der Woche. Jede Kategorie im Menü kann angeklickt werden, um alles anzuzeigen.</p>
+      <button id="closeInfoBtn">Ok, verstanden</button>
     </div>
   </div>
 
-  <!-- SCRIPT -->
   <script src="app.js"></script>
 </body>
 </html>
