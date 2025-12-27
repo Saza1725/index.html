@@ -8,15 +8,15 @@
 </head>
 <body>
 
-  <!-- MENÜ BUTTON -->
+  <!-- MENU BUTTON -->
   <div id="menuButton">☰</div>
 
   <!-- SEITENMENÜ -->
   <nav id="menu">
     <a href="#" id="homeLink">Heute</a>
+    <a href="#" id="infoLink">Information</a>
     <a href="#" id="personalLink">Persönlich</a>
     <a href="#" id="archiveLink">Archiv</a>
-    <a href="#" id="infoLink">Information</a>
   </nav>
 
   <!-- HEADER -->
@@ -29,17 +29,32 @@
 
   <!-- MAIN CONTENT -->
   <main id="main">
-    <div id="quote">Lädt...</div>
-    <div id="yearCountdown"></div>
-
+    <div id="timeButtonsText">Morgen, Mittag, Abend</div>
     <div id="buttons">
       <button id="morningBtn">Morgen</button>
       <button id="noonBtn">Mittag</button>
       <button id="eveningBtn">Abend</button>
     </div>
-    <div id="tagesMotivationText">Hol dir deine Tages-Motivation ab!</div>
-    <div id="personalQuote"></div>
+    <div id="dailyMotivationText">Hol dir deine Tages-Motivation ab!</div>
   </main>
+
+  <!-- INFO OVERLAY -->
+  <div id="infoOverlay" class="overlay">
+    <div id="infoContent">
+      <h2>Information</h2>
+      <p>Willkommen auf unserer Motivationsseite! Hier bekommst du täglich neue Impulse.</p>
+      <button id="closeInfoBtn">✕</button>
+    </div>
+  </div>
+
+  <!-- PERSÖNLICH OVERLAY -->
+  <div id="personalOverlay">
+    <div id="personalHeader">
+      <span>Persönlich</span>
+      <button id="closePersonalBtn">✕</button>
+    </div>
+    <div id="personalContent"></div>
+  </div>
 
   <!-- ARCHIV OVERLAY -->
   <div id="archiveOverlay">
@@ -52,30 +67,6 @@
     <div id="monthDetail"></div>
   </div>
 
-  <!-- PERSÖNLICHER BEREICH -->
-  <div id="personalOverlay">
-    <div id="personalHeader">
-      <span>Persönlich</span>
-      <button id="closePersonalBtn">✕</button>
-    </div>
-    <div id="personalContent">
-      <section id="notesSection">
-        <h3>Meine Notizen</h3>
-        <div id="notesContent"></div>
-      </section>
-      <section id="weeklyQuoteSection">
-        <h3>Zitat der Woche</h3>
-        <div id="weeklyQuoteContent"></div>
-      </section>
-    </div>
-  </div>
-
-  <!-- INFO OVERLAY -->
-  <div id="infoOverlay">
-    <div id="infoContent"></div>
-  </div>
-
-  <!-- SCRIPT -->
   <script src="app.js"></script>
 </body>
 </html>
