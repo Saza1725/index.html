@@ -75,21 +75,21 @@ header { margin-top: 15px; }
 .overlay {
   position: fixed;
   inset: 0;
-  background: url('Polar.jpg') center/cover fixed;
+  background: url('Polar.jpg') center/cover fixed; /* nur Hintergrund sichtbar */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10000;
 }
 #infoContent {
-  background: rgba(173,216,230,0.9);
+  background: rgba(255,255,255,0.0); /* transparent */
   padding: 30px;
   border-radius: 15px;
   max-width: 80%;
   text-align: center;
   font-weight:bold;
+  cursor: pointer; /* zeigt, dass klickbar */
 }
-#closeInfoBtn { margin-top:15px; padding:8px 12px; font-size:1em; cursor:pointer; }
 
 .slideIn {
   animation: slideDown 0.8s ease-out forwards;
