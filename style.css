@@ -174,11 +174,15 @@ button:disabled {
 .archiveItem,
 .note,
 .quoteBox {
+  display: inline-block;
   background: rgba(255,255,255,0.85);
-  padding: 12px;
-  border-radius: 12px;
-  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  margin: 8px auto;
   font-weight: bold;
+  max-width: 90%;
+  text-align: center;
+  word-wrap: break-word;
 }
 
 /* ARCHIV */
