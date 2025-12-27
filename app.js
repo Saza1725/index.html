@@ -37,15 +37,21 @@ document.addEventListener("DOMContentLoaded", () => {
     link.onclick = () => { menu.style.right = "-260px"; menuOpen = false; };
   });
 
-  /* INFO OVERLAY */
-  function showInfo() {
-    infoOverlay.style.display = "flex";
-    infoOverlay.classList.remove("slideIn");
-    void infoOverlay.offsetWidth; // reflow für wiederholtes Abspielen
-    infoOverlay.classList.add("slideIn");
-  }
-  infoLink.onclick = showInfo;
-  closeInfoBtn.onclick = () => infoOverlay.style.display = "none";
+  // Info Overlay anzeigen
+function showInfo() {
+  infoOverlay.style.display = "flex";
+  infoOverlay.classList.remove("slideIn");
+  void infoOverlay.offsetWidth; // reflow für wiederholtes Abspielen
+  infoOverlay.classList.add("slideIn");
+}
+
+// Klick auf den Text schließt Overlay
+document.getElementById("infoContent").onclick = () => {
+  infoOverlay.style.display = "none";
+};
+
+// Entferne das vorherige closeInfoBtn Verhalten, da das X wegfällt
+// closeInfoBtn.onclick = () => infoOverlay.style.display = "none";
   showInfo(); // sofort beim Laden
 
   /* HEADER + COUNTDOWN */
