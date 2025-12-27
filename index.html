@@ -8,65 +8,61 @@
 </head>
 <body>
 
-  <!-- MENU BUTTON -->
-  <div id="menuButton">☰</div>
+<div id="menuButton">☰</div>
 
-  <!-- SEITENMENÜ -->
-  <nav id="menu">
-    <a href="#" id="homeLink">Heute</a>
-    <a href="#" id="infoLink">Information</a>
-    <a href="#" id="personalLink">Persönlich</a>
-    <a href="#" id="archiveLink">Archiv</a>
-  </nav>
+<nav id="menu">
+  <a id="homeLink">Heute</a>
+  <a id="infoLink">Information</a>
+  <a id="personalLink">Persönlich</a>
+  <a id="archiveLink">Archiv</a>
+</nav>
 
-  <!-- HEADER -->
-  <header id="header">
-    <div id="daytime"></div>
-    <div id="weekday"></div>
-    <div id="date"></div>
-    <div id="time"></div>
-    <div id="yearCountdown"></div>
-  </header>
+<header id="header">
+  <div id="daytime"></div>
+  <div id="weekday"></div>
+  <div id="date"></div>
+  <div id="time"></div>
+</header>
 
-  <!-- MAIN CONTENT -->
-  <main id="main">
-    <div id="timeButtonsText">Morgen, Mittag, Abend</div>
-    <div id="buttons">
-      <button id="morningBtn">Morgen</button>
-      <button id="noonBtn">Mittag</button>
-      <button id="eveningBtn">Abend</button>
-    </div>
-    <div id="dailyMotivationText">Hol dir deine Tages-Motivation ab!</div>
-  </main>
+<div id="yearCountdown"></div>
 
-  <!-- INFO OVERLAY -->
-  <div id="infoOverlay" class="overlay">
-    <div id="infoContent">
-      <h2>Information</h2>
-      <p>Willkommen auf unserer Motivationsseite! Hier bekommst du täglich neue Impulse.</p>
-    </div>
+<main id="main">
+  <div id="buttons">
+    <button id="morningBtn">Morgen</button>
+    <button id="noonBtn">Mittag</button>
+    <button id="eveningBtn">Abend</button>
   </div>
 
-  <!-- PERSÖNLICH OVERLAY -->
-  <div id="personalOverlay">
-    <div id="personalHeader">
-      <span>Persönlich</span>
-      <button id="closePersonalBtn">✕</button>
-    </div>
-    <div id="personalContent"></div>
-  </div>
+  <div id="animatedQuote"></div>
 
-  <!-- ARCHIV OVERLAY -->
-  <div id="archiveOverlay">
-    <div id="archiveHeader">
-      <span>Archiv</span>
-      <button id="closeArchiveBtn">✕</button>
-    </div>
-    <button id="backBtn">← Zur Übersicht</button>
-    <div id="monthsContainer"></div>
-    <div id="monthDetail"></div>
+  <div id="dailyMotivationText">
+    Hol dir deine Tagesinspiration
   </div>
+</main>
 
-  <script src="app.js"></script>
+<!-- INFO OVERLAY -->
+<div id="infoOverlay" class="overlay">
+  <div id="infoBox">
+    <p>
+      Willkommen auf unserer Motivationsseite.<br>
+      Hier findest du tägliche Impulse, persönliche Gedanken und gemeinsame Motivation.
+    </p>
+    <button id="startBtn">Los geht’s</button>
+  </div>
+</div>
+
+<!-- PERSONAL -->
+<div id="personalOverlay" class="overlayContent">
+  <h2>Persönlich</h2>
+  <div id="personalContent"></div>
+</div>
+
+<!-- ARCHIV -->
+<div id="archiveOverlay" class="overlayContent">
+  <h2>Unsere gemeinsame Motivation</h2>
+  <div id="archiveContent"></div>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
