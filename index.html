@@ -37,19 +37,10 @@
       <button id="eveningBtn">Abend</button>
     </div>
 
-    <div id="personalQuote" style="display:none;"></div>
-  </main>
+    <div id="personalQuote"></div>
 
-  <!-- PERSÖNLICHER BEREICH -->
-  <div id="personalOverlay">
-    <div id="personalHeader">
-      <span>Persönlich</span>
-      <button id="closePersonalBtn">✕</button>
-    </div>
-    <div id="personalContent">
-      <!-- Persönliche Inhalte werden hier per JS eingefügt -->
-    </div>
-  </div>
+    <div id="personalContent"></div>
+  </main>
 
   <!-- ARCHIV OVERLAY -->
   <div id="archiveOverlay">
@@ -58,8 +49,29 @@
       <button id="closeArchiveBtn">✕</button>
     </div>
     <button id="backBtn">← Zur Monatsübersicht</button>
-    <div id="monthsContainer"></div>
-    <div id="monthDetail"></div>
+    <div id="monthsContainer" style="display:flex; flex-wrap:wrap; gap:10px;"></div>
+    <div id="monthDetail" style="margin-top:20px;"></div>
+  </div>
+
+  <!-- PERSÖNLICHER BEREICH OVERLAY -->
+  <div id="personalOverlay">
+    <div id="personalHeader">
+      <span>Persönlich</span>
+      <button id="closePersonalBtn">✕</button>
+    </div>
+    <div id="personalContent"></div>
+  </div>
+
+  <!-- INFO OVERLAY -->
+  <div id="infoOverlay">
+    <div id="infoBox">
+      <h2>Willkommen!</h2>
+      <p>
+        Auf dieser Seite findest du tägliche Zitate, persönliche Wochenimpulse und Notizen.
+        Nutze das Menü, um zu deinem persönlichen Bereich, Archiv oder Informationen zu gelangen.
+      </p>
+      <button id="closeInfoBtn">Verstanden</button>
+    </div>
   </div>
 
   <script src="app.js"></script>
