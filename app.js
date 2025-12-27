@@ -132,26 +132,42 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("weeklyQuote.json").then(r=>r.json()).then(d=>{personalWeeklyQuote=d.weeklyQuote||"";}).catch(()=>{personalWeeklyQuote="";});
 
   /* ARCHIV */
-  function showMonths(){
-    monthsContainer.innerHTML="";
-    monthDetail.style.display="none";
-    backBtn.style.display="none";
+  function showMonths() {
+  monthsContainer.innerHTML = "";
+  monthDetail.style.display = "block"; // Immer sichtbar im Overlay
+  backBtn.style.display = "none"; // Kein Zurück nötig
 
-    const dailyQuotes = quotesData? quotesData.daily : [];
-    const personalQuotes = quotesData? quotesData.personal : {};
+  monthDetail.innerHTML = ""; // Leeren vorherigen Inhalt
 
-    // Tägliche Zitate
-    const dailySection=document.createElement("div");
-    dailySection.innerHTML="<h3>Tägliche Zitate</h3>";
-    dailyQuotes.forEach(q=>{const div=document.createElement("div"); div.classList.add("archiveItem"); div.innerText=q; dailySection.appendChild(div);});
-    monthDetail.appendChild(dailySection);
+  if (!quotesData) return;
 
-    // Persönliche Zitate
-    const personalSection=document.createElement("div");
-    personalSection.innerHTML="<h3>Persönliche Zitate</h3>";
-    ["morning","noon","evening"].forEach(t=>{if(personalQuotes[t]) personalQuotes[t].forEach(q=>{const div=document.createElement("div"); div.classList.add("archiveItem"); div.innerText=q; personalSection.appendChild(div);});});
-    monthDetail.appendChild(personalSection);
-  }
+  // Tägliche Zitate
+  const dailySection = document.createElement("div");
+  dailySection.innerHTML = "<h3>Tägliche Zitate</h3>";
+  quotesData.daily.forEach(q => {
+    const div = document.createElement("div");
+    div.classList.add("archiveItem");
+    div.innerText = q;
+    dailySection.appendChild(div);
+  });
+  monthDetail.appendChild(dailySection);
+
+  // Persönliche Zitate (Morgen, Mittag, Abend)
+  const personalSection = document.createElement("div");
+  personalSection.innerHTML = "<h3>Persönliche Zitate</h3>";
+  ["morning","noon","evening"].forEach(t => {
+    if (quotesData.personal[t]) {
+      quotesData.personal[t].forEach(q => {
+        const div = document.createElement("div");
+        div.classList.add("archiveItem");
+        div.innerText = q;
+        personalSection.appendChild(div);
+      });
+    }
+  });
+  monthDetail.appendChild(personalSection);
+}
+    
 
   archiveLink.onclick=()=>{archiveOverlay.style.display="flex"; showMonths();};
   closeArchiveBtn.onclick=()=>{archiveOverlay.style.display="none";};
