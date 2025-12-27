@@ -132,34 +132,104 @@ button:disabled {
   cursor: pointer;
 }
 
-/* ================= PERSONAL & ARCHIVE ================= */
-#personalOverlay,
+/* PERSÖNLICHER BEREICH */
+#personalOverlay {
+  position: fixed;
+  inset: 0;
+  background: url('Polar.jpg') center/cover fixed;
+  display: none;
+  overflow-y: auto;
+  padding: 30px 20px;
+}
+#personalHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+#personalContent { font-weight: bold; }
+
+.personalSection {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.personalSection h3 {
+  margin-bottom: 10px;
+  font-size: 1.4em;
+  font-weight: bold;
+}
+
+.note, .quoteBox {
+  display: inline-block; /* Größe passt sich Textlänge an */
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  margin: 5px auto;
+  font-weight: bold;
+  color: black;
+}
+
+/* ARCHIV */
 #archiveOverlay {
+  position: fixed;
+  inset: 0;
+  background: url('Polar.jpg') center/cover fixed;
+  display: none;
   padding: 30px 20px;
   overflow-y: auto;
 }
-
-#personalHeader,
 #archiveHeader {
   display: flex;
   justify-content: space-between;
   font-size: 1.8em;
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
-
-.personalSection {
+#monthsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+#monthsContainer button {
+  padding: 10px 15px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: none;
+  background-color: #007acc;
+  color: white;
+  cursor: pointer;
+}
+#monthDetail {
+  margin-top: 20px;
+}
+.archiveSection {
   margin-bottom: 30px;
+  text-align: center;
 }
-
-.note,
-.quoteBox,
-.archiveItem {
-  background: rgba(255,255,255,0.85);
-  padding: 10px 14px;
-  border-radius: 14px;
+.archiveSection h3 {
   margin-bottom: 10px;
+  font-size: 1.4em;
   font-weight: bold;
-  display: inline-block; /* 🔥 passt sich Text an */
-  max-width: 90%;
+}
+.archiveItem {
+  display: inline-block;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 8px;
+  margin: 5px auto;
+  font-weight: bold;
+  color: black;
+}
+#backBtn {
+  display: none;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ff7f50;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
