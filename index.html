@@ -16,6 +16,7 @@
     <a href="#" id="homeLink">Heute</a>
     <a href="#" id="personalLink">Persönlich</a>
     <a href="#" id="archiveLink">Archiv</a>
+    <a href="#" id="infoLink">Information</a>
   </nav>
 
   <!-- HEADER -->
@@ -36,16 +37,14 @@
       <button id="noonBtn">Mittag</button>
       <button id="eveningBtn">Abend</button>
     </div>
-
-    <div id="hintText">Hol dir deine Tages-Motivation ab</div>
+    <div id="tagesMotivationText">Hol dir deine Tages-Motivation ab!</div>
     <div id="personalQuote"></div>
-    <div id="personalContent"></div>
   </main>
 
   <!-- ARCHIV OVERLAY -->
   <div id="archiveOverlay">
     <div id="archiveHeader">
-      <span>Archiv - Unsere Gemeinsame Motivation</span>
+      <span>Archiv</span>
       <button id="closeArchiveBtn">✕</button>
     </div>
     <button id="backBtn">← Zur Übersicht</button>
@@ -59,18 +58,24 @@
       <span>Persönlich</span>
       <button id="closePersonalBtn">✕</button>
     </div>
-    <div id="personalContent"></div>
+    <div id="personalContent">
+      <section id="notesSection">
+        <h3>Meine Notizen</h3>
+        <div id="notesContent"></div>
+      </section>
+      <section id="weeklyQuoteSection">
+        <h3>Zitat der Woche</h3>
+        <div id="weeklyQuoteContent"></div>
+      </section>
+    </div>
   </div>
 
   <!-- INFO OVERLAY -->
   <div id="infoOverlay">
-    <div class="infoContent">
-      <h2>Willkommen!</h2>
-      <p>Hier findest du tägliche Motivation, deine persönlichen Notizen und das Zitat der Woche. Jede Kategorie im Menü kann angeklickt werden, um alles anzuzeigen.</p>
-      <button id="closeInfoBtn">Ok, verstanden</button>
-    </div>
+    <div id="infoContent"></div>
   </div>
 
+  <!-- SCRIPT -->
   <script src="app.js"></script>
 </body>
 </html>
