@@ -135,3 +135,17 @@ body {
   padding: 40px;
   overflow-y: auto;
 }
+
+#infoOverlay {
+  pointer-events: auto;
+}
+
+#infoContent {
+  pointer-events: auto;
+}
+
+#startBtn {
+  pointer-events: auto;
+  z-index: 20000;
+  position: relative;
+}
