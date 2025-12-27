@@ -6,41 +6,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveLink = document.getElementById("archiveLink");
   const infoLink = document.getElementById("infoLink");
 
-  const personalOverlay = document.getElementById("personalOverlay");
-  const closePersonalBtn = document.getElementById("closePersonalBtn");
-  const personalContent = document.getElementById("personalContent");
-
-  const archiveOverlay = document.getElementById("archiveOverlay");
-  const monthDetail = document.getElementById("monthDetail");
-  const closeArchiveBtn = document.getElementById("closeArchiveBtn");
-
   const infoOverlay = document.getElementById("infoOverlay");
   const infoContent = document.getElementById("infoContent");
   const startBtn = document.getElementById("startBtn");
 
+  const dailyQuoteDisplay = document.getElementById("dailyQuoteDisplay");
   const dailyMotivationText = document.getElementById("dailyMotivationText");
-  const personalQuoteDisplay = document.getElementById("personalQuoteDisplay");
   const yearCountdownEl = document.getElementById("yearCountdown");
 
   const morningBtn = document.getElementById("morningBtn");
   const noonBtn = document.getElementById("noonBtn");
   const eveningBtn = document.getElementById("eveningBtn");
 
+  const personalOverlay = document.getElementById("personalOverlay");
+  const archiveOverlay = document.getElementById("archiveOverlay");
+
   let menuOpen = false;
-  let quotesData = null;
-  let personalNotes = [];
-  let personalWeeklyQuote = "";
+  let quotesData = { daily: [], personal: { morning: [], noon: [], evening: [] } };
+  let quoteIndex = 0;
 
   /* ================= MENU ================= */
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
+    // Schließt Overlays, wenn Menü öffnet
+    if(menuOpen) { infoOverlay.style.display="none"; personalOverlay.style.display="none"; archiveOverlay.style.display="none"; }
   };
   [homeLink, personalLink, archiveLink, infoLink].forEach(link=>{
-    link.onclick=()=>{
-      menu.style.right="-260px";
-      menuOpen=false;
-    };
+    link.onclick=()=>{ menu.style.right="-260px"; menuOpen=false; };
   });
 
   /* ================= INFO ================= */
@@ -92,100 +85,27 @@ document.addEventListener("DOMContentLoaded", () => {
     eveningBtn.disabled = !(h>=18||h<6);
   }
 
-  function getDayOfYear(){
-    const now=new Date();
-    const start=new Date(now.getFullYear(),0,0);
-    return Math.floor((now-start)/86400000);
-  }
+  function getDayOfYear(){ const now=new Date(); const start=new Date(now.getFullYear(),0,0); return Math.floor((now-start)/86400000); }
 
   function showPersonalQuote(type){
     if(!quotesData) return;
     const list = quotesData.personal[type];
-    personalQuoteDisplay.innerText=list[getDayOfYear()%list.length];
-    personalQuoteDisplay.style.display="block";
+    dailyQuoteDisplay.innerText=list[getDayOfYear()%list.length];
   }
   morningBtn.onclick=()=>showPersonalQuote("morning");
   noonBtn.onclick=()=>showPersonalQuote("noon");
   eveningBtn.onclick=()=>showPersonalQuote("evening");
 
-  /* ================= PERSÖNLICH ================= */
-  personalLink.onclick=()=>{
-    personalOverlay.style.display="flex";
-    archiveOverlay.style.display="none";
-    menu.style.right="-260px";
-    menuOpen=false;
-    renderPersonal();
-  };
-  closePersonalBtn.onclick=()=>personalOverlay.style.display="none";
-
-  function renderPersonal(){
-    personalContent.innerHTML="";
-    // Notizen
-    const notesSection=document.createElement("div");
-    notesSection.classList.add("personalSection");
-    notesSection.innerHTML="<h3>Meine Notizen</h3>";
-    if(personalNotes.length===0){ notesSection.innerHTML+="<p>Keine Notizen vorhanden.</p>"; }
-    else{ personalNotes.forEach(n=>{
-      const div=document.createElement("div");
-      div.classList.add("note");
-      div.innerText=n;
-      notesSection.appendChild(div);
-    });}
-    personalContent.appendChild(notesSection);
-    // Wochenzitat
-    const quoteSection=document.createElement("div");
-    quoteSection.classList.add("personalSection");
-    quoteSection.innerHTML="<h3>Zitat der Woche</h3>";
-    if(personalWeeklyQuote){
-      const div=document.createElement("div");
-      div.classList.add("quoteBox");
-      div.innerText=personalWeeklyQuote;
-      quoteSection.appendChild(div);
-    }else{ quoteSection.innerHTML+="<p>Kein Wochenzitat vorhanden.</p>"; }
-    personalContent.appendChild(quoteSection);
+  /* ================= AUTOMATISCHES TAGESZITAT ================= */
+  function autoDailyQuote(){
+    if(quotesData.daily.length === 0) return;
+    dailyQuoteDisplay.innerText = quotesData.daily[quoteIndex % quotesData.daily.length];
+    quoteIndex++;
   }
-
-  fetch("notes.json").then(r=>r.json()).then(d=>{ personalNotes=d.notes||[]; }).catch(()=>{ personalNotes=[]; });
-  fetch("weeklyQuote.json").then(r=>r.json()).then(d=>{ personalWeeklyQuote=d.weeklyQuote||""; }).catch(()=>{ personalWeeklyQuote=""; });
-
-  /* ================= ARCHIV ================= */
-  function showArchive(){
-    if(!quotesData) return;
-    personalOverlay.style.display="none";
-    monthDetail.innerHTML="";
-    const dailyDiv=document.createElement("div");
-    dailyDiv.innerHTML="<h3>Tägliche Zitate</h3>";
-    quotesData.daily.forEach(q=>{
-      const div=document.createElement("div");
-      div.className="archiveItem";
-      div.innerText=q;
-      dailyDiv.appendChild(div);
-    });
-    monthDetail.appendChild(dailyDiv);
-
-    const personalDiv=document.createElement("div");
-    personalDiv.innerHTML="<h3>Persönliche Zitate</h3>";
-    ["morning","noon","evening"].forEach(type=>{
-      quotesData.personal[type].forEach(q=>{
-        const div=document.createElement("div");
-        div.className="archiveItem";
-        div.innerText=`${type.charAt(0).toUpperCase()+type.slice(1)}: ${q}`;
-        personalDiv.appendChild(div);
-      });
-    });
-    monthDetail.appendChild(personalDiv);
-  }
-  archiveLink.onclick=()=>{
-    archiveOverlay.style.display="flex";
-    personalOverlay.style.display="none";
-    menu.style.right="-260px";
-    menuOpen=false;
-    showArchive();
-  };
-  closeArchiveBtn.onclick=()=>archiveOverlay.style.display="none";
+  setInterval(autoDailyQuote, 10000); // alle 10 Sekunden wechseln
 
   /* ================= LOAD QUOTES ================= */
-  fetch("quotes.json").then(r=>r.json()).then(d=>{ quotesData=d; }).catch(()=>{ quotesData={daily:[], personal:{morning:[], noon:[], evening:[]}}; });
+  fetch("quotes.json").then(r=>r.json()).then(d=>{ quotesData=d; autoDailyQuote(); }).catch(()=>{ console.error("quotes.json konnte nicht geladen werden"); });
 
   /* ================= START ================= */
   updateHeader();
