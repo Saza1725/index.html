@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+#document.addEventListener("DOMContentLoaded", () => {
 
   // ======= DOM ELEMENTE =======
   const quoteEl = document.getElementById("quote");
@@ -108,9 +108,17 @@ fetch("weeklyQuote.json")
     .catch(err => console.error("notes.json konnte nicht geladen werden", err));
 
   fetch("weeklyQuote.json")
-    .then(res => res.json())
-    .then(data => { personalWeeklyQuote = data.quote || ""; })
-    .catch(err => console.error("weeklyQuote.json konnte nicht geladen werden", err));
+  .then(res => {
+    if (!res.ok) throw new Error("weeklyQuote.json fehlt");
+    return res.json();
+  })
+  .then(data => {
+    personalWeeklyQuote = data.text || "";
+  })
+  .catch(err => {
+    console.error("weeklyQuote.json konnte nicht geladen werden", err);
+    personalWeeklyQuote = "";
+  });
 
   function getDayOfYear() { const now = new Date(); const start = new Date(now.getFullYear(),0,0); return Math.floor((now-start)/86400000); }
   function getCategory() { const h=new Date().getHours(); return h>=6&&h<12?"morning":h>=12&&h<18?"noon":"evening"; }
