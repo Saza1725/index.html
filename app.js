@@ -147,10 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(() => { personalNotes = []; });
 
   fetch("weeklyQuote.json")
-    .then(res => res.json())
-    .then(data => { personalWeeklyQuote = data.text || ""; })
-    .catch(() => { personalWeeklyQuote = ""; });
-
+  .then(res => res.json())
+  .then(data => {
+    personalWeeklyQuote = data.weeklyQuote || "";
+    updateWeeklyQuoteUI(); // Funktion, die das Zitat im Overlay darstellt
+  })
+  .catch(() => {
+    personalWeeklyQuote = "";
+    updateWeeklyQuoteUI();
+  });
   /* ================== ARCHIV ================== */
   const months = [];
   for (let y=2025; y<=2026; y++) {
