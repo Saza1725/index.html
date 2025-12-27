@@ -1,3 +1,4 @@
+/* ===================== GLOBAL ===================== */
 body {
   margin: 0;
   font-family: Georgia, serif;
@@ -6,45 +7,146 @@ body {
   text-align: center;
 }
 
-/* MENU */
-#menuButton { position: fixed; top: 15px; right: 20px; font-size: 2em; z-index:1000; cursor:pointer; }
-#menu { position: fixed; top:0; right:-260px; width:260px; height:100%; background: rgba(0,0,0,0.95); padding-top:60px; transition: right 0.4s ease; z-index:999; }
-#menu a { display:block; padding:15px 20px; color:white; text-decoration:none; }
+/* ===================== MENU ===================== */
+#menuButton {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 2em;
+  z-index: 1000;
+  cursor: pointer;
+}
+#menu {
+  position: fixed;
+  top: 0;
+  right: -260px;
+  width: 260px;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  padding-top: 60px;
+  transition: right 0.4s ease;
+  z-index: 999;
+}
+#menu a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+}
 
-/* HEADER */
-header { margin-top:15px; }
-#daytime { font-size:2em; font-weight:bold; }
-#weekday, #date, #time { font-size:1.2em; }
+/* ===================== HEADER ===================== */
+header { margin-top: 15px; }
+#daytime, #weekday, #date, #time {
+  font-weight: bold;
+}
+#daytime { font-size: 2em; }
+#weekday, #date, #time { font-size: 1.2em; color: black; } /* schwarz über Buttons */
 
-/* TAGESZITAT & BUTTONS */
-#yearCountdown { margin:30px auto; max-width:90%; padding:15px 20px; font-size:1.2em; font-weight:bold; background: rgba(0,0,0,0.5); border-radius:14px; box-shadow:0 0 20px rgba(0,0,0,0.5); }
-#quote { margin:40px auto; max-width:80%; font-size:1.6em; padding:20px; background: rgba(0,0,0,0.35); border-radius:15px; }
-#buttons { margin-top:20px; }
-button { margin:5px; padding:10px 15px; background: rgba(0,0,0,0.5); color:white; border:none; border-radius:6px; font-weight:bold; }
-button:disabled { opacity:0.4; }
-#personalQuote { margin:20px auto; max-width:70%; font-size:1.2em; background: rgba(0,0,0,0.45); border-radius:12px; display:none; font-weight:bold; }
+/* ===================== TAGESZITAT & BUTTONS ===================== */
+#yearCountdown {
+  margin: 30px auto;
+  max-width: 90%;
+  padding: 15px 20px;
+  font-size: 1.2em;
+  font-weight: bold;
+  background: rgba(0,0,0,0.5);
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+#quote {
+  display: none; /* Hauptseite zeigt kein Zitat mehr */
+  margin: 40px auto;
+  max-width: 80%;
+  font-size: 1.6em;
+  padding: 20px;
+  background: rgba(0,0,0,0.35);
+  border-radius: 15px;
+}
+#buttons { margin-top: 20px; }
+button {
+  margin: 5px;
+  padding: 10px 15px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:disabled { opacity: 0.4; }
 
-#tagesMotivationText { margin-top:10px; font-weight:bold; animation: blink 1.5s infinite; }
+/* Überschrift über Buttons */
+#timeButtonsText {
+  color: black;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
 
-/* BLINK ANIMATION */
-@keyframes blink { 0%,50%,100%{opacity:1} 25%,75%{opacity:0.2} }
+/* Animierter Hinweistext */
+#dailyMotivationText {
+  color: black;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-top: 10px;
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%,50%,100% { opacity: 1; }
+  25%,75% { opacity: 0.3; }
+}
 
-/* ARCHIV */
-#archiveOverlay { position:fixed; inset:0; background: url('Polar.jpg') center/cover fixed; backdrop-filter: blur(6px); z-index:9999; display:none; overflow-y:auto; padding:30px 20px; color:#fff; }
-#archiveHeader { display:flex; justify-content:space-between; align-items:center; font-size:1.8em; margin-bottom:20px; font-weight:bold; }
-#closeArchiveBtn, #backBtn { cursor:pointer; padding:8px 12px; border:none; border-radius:6px; background-color:#ff7f50; color:white; }
-#monthsContainer { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
-#monthsContainer button { padding:10px 15px; border-radius:8px; border:none; background-color:#007acc; color:white; cursor:pointer; }
-#monthsContainer button:hover { background-color:#005f99; }
-.archiveItem { background: rgba(255,255,255,0.85); padding:12px; border-radius:10px; margin-bottom:12px; color:#000; font-weight:bold; }
-
-/* PERSÖNLICHER BEREICH */
-#personalOverlay { position:fixed; inset:0; background: url('Polar.jpg') center/cover fixed; backdrop-filter: blur(6px); z-index:9999; display:none; overflow-y:auto; padding:30px 20px; color:#fff; }
+/* ===================== PERSÖNLICHER BEREICH ===================== */
+#personalOverlay {
+  position: fixed;
+  inset:0;
+  background: url('Polar.jpg') center/cover fixed;
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display:none;
+  overflow-y:auto;
+  padding:30px 20px;
+  color:#000;
+}
 #personalHeader { display:flex; justify-content:space-between; align-items:center; font-size:1.8em; margin-bottom:20px; font-weight:bold; }
-#closePersonalBtn { cursor:pointer; background:none; border:none; font-size:1.5em; color:white; }
+#closePersonalBtn { background:none; border:none; color:#000; font-size:1.5em; cursor:pointer; }
 
-/* INFO OVERLAY */
-#infoOverlay { position:fixed; inset:0; background: url('Polar.jpg') center/cover fixed; color:white; display:flex; justify-content:center; align-items:center; z-index:99999; opacity:0; pointer-events:none; transition: opacity 0.8s ease; }
-#infoOverlay.show { opacity:1; pointer-events:all; }
-#infoContent { background: rgba(0,0,0,0.6); padding:30px 40px; border-radius:12px; font-weight:bold; font-size:1.2em; text-align:center; max-width:90%; animation: slideIn 0.6s ease forwards; }
-@keyframes slideIn { 0%{transform:translateY(-50px);opacity:0;} 100%{transform:translateY(0);opacity:1;} }
+.personalSection h3 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.note, .quoteBox {
+  background: rgba(255,255,255,0.85);
+  color: #000;
+  font-weight: bold;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:12px;
+}
+
+/* ===================== ARCHIV ===================== */
+#archiveOverlay {
+  position: fixed;
+  inset: 0;
+  background: url('Polar.jpg') center/cover fixed;
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: none;
+  overflow-y: auto;
+  padding: 30px 20px;
+  color:#000;
+}
+#archiveHeader { display:flex; justify-content:space-between; align-items:center; font-size:1.8em; margin-bottom:20px; font-weight:bold; }
+#closeArchiveBtn { background:none; border:none; color:#000; font-size:1.5em; cursor:pointer; }
+#monthsContainer { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin-bottom:20px; }
+#monthsContainer button {
+  padding:10px 15px; font-size:1em; border-radius:8px; border:none; background-color:#007acc; color:white; cursor:pointer; transition:all 0.25s ease-in-out;
+}
+#monthsContainer button:hover { background-color:#005f99; }
+#backBtn {
+  display:none; padding:8px 12px; border:none; border-radius:6px; background-color:#ff7f50; color:white; font-size:1em; cursor:pointer; margin-bottom:15px;
+}
+#backBtn:hover { background-color:#e06b3a; }
+#monthDetail h3 { margin-bottom:15px; text-align:center; font-weight: bold; }
+.archiveItem { background: rgba(255,255,255,0.85); padding:12px; border-radius:10px; margin-bottom:12px; color:#000; font-weight: bold; font-size:1em; }
+.archiveItem .date { font-weight:bold; margin-bottom:5px; font-size:0.9em; }
