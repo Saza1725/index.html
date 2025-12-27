@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     yearCountdownEl.innerText = `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
-  /* ================== ZITATE ================== */
+  /* ================== TAGESZITAT ================== */
   fetch("quotes.json")
     .then(res => res.json())
     .then(data => { quotesData = data; showDailyQuote(); })
@@ -100,10 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* ================== PERSÖNLICHER BEREICH ================== */
-  personalLink.onclick = () => {
-    personalOverlay.style.display = "flex";
-    renderPersonal();
-  };
+  personalLink.onclick = () => { personalOverlay.style.display = "flex"; renderPersonal(); };
   closePersonalBtn.onclick = () => { personalOverlay.style.display = "none"; };
 
   function renderPersonal() {
@@ -113,23 +110,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const notesSection = document.createElement("div");
     notesSection.classList.add("personalSection");
     notesSection.innerHTML = "<h3>Meine Notizen</h3>";
-    if (personalNotes.length === 0) {
-      notesSection.innerHTML += "<p>Keine Notizen vorhanden.</p>";
-    } else {
-      personalNotes.forEach(n => {
-        const div = document.createElement("div");
-        div.classList.add("note");
-        div.innerText = n;
-        notesSection.appendChild(div);
-      });
-    }
+    if (personalNotes.length === 0) notesSection.innerHTML += "<p>Keine Notizen vorhanden.</p>";
+    else personalNotes.forEach(n => {
+      const div = document.createElement("div");
+      div.classList.add("note");
+      div.innerText = n;
+      notesSection.appendChild(div);
+    });
     personalContent.appendChild(notesSection);
 
     // Wochenzitat
     const quoteSection = document.createElement("div");
     quoteSection.classList.add("personalSection");
     quoteSection.innerHTML = "<h3>Zitat der Woche</h3>";
-    if (personalWeeklyQuote) {
+    if (personalWeeklyQuote && personalWeeklyQuote.trim() !== "") {
       const div = document.createElement("div");
       div.classList.add("quoteBox");
       div.innerText = personalWeeklyQuote;
@@ -147,15 +141,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(() => { personalNotes = []; });
 
   fetch("weeklyQuote.json")
-  .then(res => res.json())
-  .then(data => {
-    personalWeeklyQuote = data.weeklyQuote || "";
-    updateWeeklyQuoteUI(); // Funktion, die das Zitat im Overlay darstellt
-  })
-  .catch(() => {
-    personalWeeklyQuote = "";
-    updateWeeklyQuoteUI();
-  });
+    .then(res => res.json())
+    .then(data => {
+      personalWeeklyQuote = data.weeklyQuote || "";
+      renderPersonal(); // direkt aufrufen, damit es angezeigt wird
+    })
+    .catch(() => { personalWeeklyQuote = ""; });
+
   /* ================== ARCHIV ================== */
   const months = [];
   for (let y=2025; y<=2026; y++) {
@@ -188,4 +180,5 @@ document.addEventListener("DOMContentLoaded", () => {
   updateButtons();
   updateYearCountdown();
   setInterval(()=>{updateHeader(); updateButtons(); updateYearCountdown();},1000);
+
 });
