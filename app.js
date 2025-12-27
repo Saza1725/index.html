@@ -7,22 +7,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const menuButton = document.getElementById("menuButton");
   const menu = document.getElementById("menu");
-
   const homeLink = document.getElementById("homeLink");
-  const infoLink = document.getElementById("infoLink");
   const personalLink = document.getElementById("personalLink");
   const archiveLink = document.getElementById("archiveLink");
-
-  const infoOverlay = document.getElementById("infoOverlay");
-  const infoContent = document.getElementById("infoContent");
+  const infoLink = document.getElementById("infoLink");
 
   const personalOverlay = document.getElementById("personalOverlay");
-  const personalContent = document.getElementById("personalContent");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
+  const personalContent = document.getElementById("personalContent");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
   const monthDetail = document.getElementById("monthDetail");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
+
+  const infoOverlay = document.getElementById("infoOverlay");
+  const infoContent = document.getElementById("infoContent");
+  const startBtn = document.getElementById("startBtn");
 
   const yearCountdownEl = document.getElementById("yearCountdown");
 
@@ -31,39 +31,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  /* ================== HILFSFUNKTIONEN ================== */
-  function closeAllOverlays() {
-    infoOverlay.style.display = "none";
-    personalOverlay.style.display = "none";
-    archiveOverlay.style.display = "none";
-  }
-
-  function closeMenu() {
-    menu.style.right = "-260px";
-    menuOpen = false;
-  }
-
   /* ================== MENU ================== */
   menuButton.onclick = () => {
-    if (menuOpen) {
-      closeMenu();
-    } else {
-      closeAllOverlays();
-      menu.style.right = "0";
-      menuOpen = true;
-    }
+    menu.style.right = menuOpen ? "-260px" : "0";
+    menuOpen = !menuOpen;
   };
 
-  [homeLink, infoLink, personalLink, archiveLink].forEach(link => {
-    link.onclick = () => closeMenu();
+  [homeLink, personalLink, archiveLink, infoLink].forEach(link => {
+    link.onclick = () => {
+      menu.style.right = "-260px";
+      menuOpen = false;
+    };
   });
 
   /* ================== INFO OVERLAY ================== */
   function showInfo() {
-    closeAllOverlays();
     infoOverlay.style.display = "flex";
-    infoOverlay.classList.remove("slideIn", "slideOut");
-    void infoOverlay.offsetWidth;
+    infoOverlay.classList.remove("slideOut");
+    infoOverlay.classList.remove("slideIn");
+    void infoOverlay.offsetWidth; // Reflow
     infoOverlay.classList.add("slideIn");
   }
 
@@ -72,14 +58,19 @@ document.addEventListener("DOMContentLoaded", () => {
     infoOverlay.classList.add("slideOut");
     setTimeout(() => {
       infoOverlay.style.display = "none";
+      infoOverlay.classList.remove("slideOut");
     }, 600);
   }
 
-  infoLink.onclick = showInfo;
   infoContent.onclick = hideInfo;
 
-  // Info bei jedem Laden anzeigen
-  showInfo();
+  startBtn.onclick = (e) => {
+    e.stopPropagation();
+    hideInfo();
+  };
+
+  infoLink.onclick = showInfo;
+  showInfo(); // bei Seitenaufruf
 
   /* ================== HEADER ================== */
   function getCategory() {
@@ -89,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateHeader() {
     const now = new Date();
-    const days = ["So","Mo","Di","Mi","Do","Fr","Sa"];
+    const days = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     document.getElementById("daytime").innerText = getCategory();
     document.getElementById("weekday").innerText = days[now.getDay()];
     document.getElementById("date").innerText = now.toLocaleDateString("de-DE");
@@ -101,7 +92,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const now = new Date();
     const end = new Date(now.getFullYear(), 11, 31, 23, 59, 59);
     const diff = end - now;
-    if (diff <= 0) return;
+    if (diff <= 0) {
+      yearCountdownEl.innerText = "";
+      return;
+    }
 
     const sec = Math.floor(diff / 1000);
     const d = Math.floor(sec / 86400);
@@ -124,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ================== ZITATE ================== */
   fetch("quotes.json")
     .then(res => res.json())
-    .then(data => quotesData = data)
+    .then(data => { quotesData = data; })
     .catch(() => console.error("quotes.json konnte nicht geladen werden"));
 
   function getDayOfYear() {
@@ -145,18 +139,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /* ================== PERSÖNLICH ================== */
   personalLink.onclick = () => {
-    closeAllOverlays();
+    archiveOverlay.style.display = "none";
     personalOverlay.style.display = "flex";
     renderPersonal();
   };
 
-  closePersonalBtn.onclick = () => personalOverlay.style.display = "none";
+  closePersonalBtn.onclick = () => {
+    personalOverlay.style.display = "none";
+  };
 
   function renderPersonal() {
     personalContent.innerHTML = "";
 
     const notesSection = document.createElement("div");
+    notesSection.className = "personalSection";
     notesSection.innerHTML = "<h3>Meine Notizen</h3>";
+
     if (personalNotes.length === 0) {
       notesSection.innerHTML += "<p>Keine Notizen vorhanden.</p>";
     } else {
@@ -167,10 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
         notesSection.appendChild(div);
       });
     }
+
     personalContent.appendChild(notesSection);
 
     const quoteSection = document.createElement("div");
+    quoteSection.className = "personalSection";
     quoteSection.innerHTML = "<h3>Zitat der Woche</h3>";
+
     if (personalWeeklyQuote) {
       const div = document.createElement("div");
       div.className = "quoteBox";
@@ -179,28 +180,22 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       quoteSection.innerHTML += "<p>Kein Wochenzitat vorhanden.</p>";
     }
+
     personalContent.appendChild(quoteSection);
   }
 
   fetch("notes.json")
     .then(res => res.json())
-    .then(data => personalNotes = data.notes || []);
+    .then(data => { personalNotes = data.notes || []; });
 
   fetch("weeklyQuote.json")
     .then(res => res.json())
-    .then(data => personalWeeklyQuote = data.weeklyQuote || "");
+    .then(data => { personalWeeklyQuote = data.weeklyQuote || ""; });
 
   /* ================== ARCHIV ================== */
-  archiveLink.onclick = () => {
-    closeAllOverlays();
-    archiveOverlay.style.display = "flex";
-    showArchive();
-  };
-
-  closeArchiveBtn.onclick = () => archiveOverlay.style.display = "none";
-
   function showArchive() {
     if (!quotesData) return;
+
     monthDetail.innerHTML = "";
 
     const dailyDiv = document.createElement("div");
@@ -211,20 +206,33 @@ document.addEventListener("DOMContentLoaded", () => {
       div.innerText = q;
       dailyDiv.appendChild(div);
     });
+
     monthDetail.appendChild(dailyDiv);
 
     const personalDiv = document.createElement("div");
     personalDiv.innerHTML = "<h3>Persönliche Zitate</h3>";
+
     ["morning", "noon", "evening"].forEach(type => {
       quotesData.personal[type].forEach(q => {
         const div = document.createElement("div");
         div.className = "archiveItem";
-        div.innerText = `${type}: ${q}`;
+        div.innerText = `${type.toUpperCase()}: ${q}`;
         personalDiv.appendChild(div);
       });
     });
+
     monthDetail.appendChild(personalDiv);
   }
+
+  archiveLink.onclick = () => {
+    personalOverlay.style.display = "none";
+    archiveOverlay.style.display = "flex";
+    showArchive();
+  };
+
+  closeArchiveBtn.onclick = () => {
+    archiveOverlay.style.display = "none";
+  };
 
   /* ================== START ================== */
   updateHeader();
