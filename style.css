@@ -2,8 +2,8 @@ body {
   margin: 0;
   font-family: Georgia, serif;
   background: url('Polar.jpg') center/cover fixed;
-  text-align: center;
   color: black;
+  text-align: center;
 }
 
 /* MENU */
@@ -12,10 +12,9 @@ body {
   top: 15px;
   right: 20px;
   font-size: 2em;
+  z-index: 1000;
   cursor: pointer;
-  z-index: 2000;
 }
-
 #menu {
   position: fixed;
   top: 0;
@@ -25,120 +24,117 @@ body {
   background: rgba(0,0,0,0.95);
   padding-top: 60px;
   transition: right 0.4s ease;
-  z-index: 1500;
+  z-index: 999;
 }
-
 #menu a {
   display: block;
-  padding: 15px;
+  padding: 15px 20px;
   color: white;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 /* HEADER */
-#header {
-  margin-top: 20px;
+header {
+  margin-top: 15px;
 }
-
-#headerMain {
-  font-size: 1.6em;
-  font-weight: bold;
-}
-
+#daytime { font-size: 2em; font-weight: bold; }
+#weekday, #date, #time { font-size: 1.2em; font-weight:bold; }
 #yearCountdown {
   position: fixed;
-  right: 15px;
-  bottom: 15px;
-  background: rgba(255,255,255,0.6);
-  padding: 10px 14px;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.5);
   border-radius: 10px;
-  font-weight: bold;
+  font-weight:bold;
+  color:black;
 }
 
-/* MAIN */
-#buttons {
-  margin-top: 40px;
-}
-
+/* BUTTONS UND TEXT */
+#buttons { margin-top: 20px; }
 button {
-  padding: 10px 18px;
   margin: 5px;
-  background: rgba(0,0,0,0.6);
+  padding: 10px 15px;
+  background: rgba(0,0,0,0.5);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
+  font-weight:bold;
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.15s;
 }
-
-button:active {
-  transform: scale(0.9);
-}
+button:active { transform: scale(0.95); }
+button:disabled { opacity: 0.4; }
 
 #dailyMotivationText {
-  margin-top: 40px;
-  font-size: 1.8em;
-  animation: fade 3s infinite;
-}
-
-@keyframes fade {
-  0%,100% {opacity:1;}
-  50% {opacity:0.4;}
-}
-
-#quoteDisplay {
   margin-top: 30px;
-  background: rgba(255,255,255,0.7);
-  padding: 20px;
-  border-radius: 12px;
-  display: inline-block;
-  font-weight: bold;
+  font-size: 1.6em;
+  font-weight:bold;
+  animation: fadeIn 3s ease-in-out infinite alternate;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0.4;}
+  100% {opacity:1;}
+}
+
+/* PERSONAL QUOTE DISPLAY */
+#personalQuoteDisplay {
+  margin-top: 20px;
+  font-size: 1.5em;
+  font-weight:bold;
 }
 
 /* INFO OVERLAY */
-#infoOverlay {
-  position: fixed;
-  inset: 0;
-  background: url('Polar.jpg') center/cover fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
-}
-
-#infoContent {
-  background: rgba(255,255,255,0.15);
-  padding: 30px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
-}
-
-#startBtn {
-  margin-top: 20px;
-}
-
-/* OVERLAYS */
-#personalOverlay,
-#archiveOverlay {
+.overlay {
   position: fixed;
   inset: 0;
   background: url('Polar.jpg') center/cover fixed;
   display: none;
-  padding: 30px;
-  overflow-y: auto;
-  z-index: 2500;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
 }
-
-.overlayHeader {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.note, .quoteBox {
-  background: rgba(255,255,255,0.8);
-  padding: 12px;
+#infoContent {
+  background: rgba(255,255,255,0.0); 
+  padding: 20px;
   border-radius: 10px;
-  margin-bottom: 10px;
-  display: inline-block;
+  max-width: 80%;
+  text-align: left;
+  font-weight:bold;
+  cursor: pointer;
 }
+#startBtn {
+  margin-top:15px;
+  padding:8px 12px;
+  font-size:1em;
+  cursor:pointer;
+}
+
+/* OVERLAY ANIMATION */
+.slideIn { animation: slideDown 0.7s ease-out forwards; }
+.slideOut { animation: slideUp 0.5s ease-in forwards; }
+
+@keyframes slideDown {
+  0% { transform: translateY(-150%); opacity:0; }
+  100% { transform: translateY(0); opacity:1; }
+}
+@keyframes slideUp {
+  0% { transform: translateY(0); opacity:1; }
+  100% { transform: translateY(-150%); opacity:0; }
+}
+
+/* PERSÖNLICHER BEREICH */
+#personalOverlay { display:none; overflow-y:auto; padding:30px 20px; }
+#personalHeader { display:flex; justify-content:space-between; font-size:1.8em; font-weight:bold; margin-bottom:20px; }
+#personalContent { font-weight:bold; }
+.personalSection { margin-bottom:20px; }
+.archiveItem, .note, .quoteBox { font-weight:bold; background: rgba(255,255,255,0.85); padding:10px; border-radius:10px; margin-bottom:10px; }
+
+/* ARCHIV */
+#archiveOverlay { display:none; padding:30px 20px; overflow-y:auto; }
+#archiveHeader { display:flex; justify-content:space-between; font-size:1.8em; font-weight:bold; margin-bottom:20px; }
+#monthsContainer { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px; }
+#monthsContainer button { padding:10px 15px; font-size:1em; border-radius:8px; border:none; background-color:#007acc; color:white; cursor:pointer; }
+#monthDetail { margin-top:20px; }
+#backBtn { display:none; padding:8px 12px; border:none; border-radius:6px; background-color:#ff7f50; color:white; cursor:pointer; margin-bottom:15px; }
