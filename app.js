@@ -101,17 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
   function showPersonalQuote(type){
     if(!quotesData) return;
     const list = quotesData.personal[type];
-    const text = list[getDayOfYear()%list.length];
-
-    personalQuoteDisplay.innerText = text;
-    personalQuoteDisplay.style.display = "block";
-
-    // Animation für Einblenden
-    personalQuoteDisplay.classList.remove("fadeIn");
-    void personalQuoteDisplay.offsetWidth;
-    personalQuoteDisplay.classList.add("fadeIn");
+    personalQuoteDisplay.innerText=list[getDayOfYear()%list.length];
+    personalQuoteDisplay.style.display="block";
   }
-
   morningBtn.onclick=()=>showPersonalQuote("morning");
   noonBtn.onclick=()=>showPersonalQuote("noon");
   eveningBtn.onclick=()=>showPersonalQuote("evening");
@@ -120,12 +112,15 @@ document.addEventListener("DOMContentLoaded", () => {
   personalLink.onclick=()=>{
     personalOverlay.style.display="flex";
     archiveOverlay.style.display="none";
+    menu.style.right="-260px";
+    menuOpen=false;
     renderPersonal();
   };
   closePersonalBtn.onclick=()=>personalOverlay.style.display="none";
 
   function renderPersonal(){
     personalContent.innerHTML="";
+    // Notizen
     const notesSection=document.createElement("div");
     notesSection.classList.add("personalSection");
     notesSection.innerHTML="<h3>Meine Notizen</h3>";
@@ -137,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notesSection.appendChild(div);
     });}
     personalContent.appendChild(notesSection);
-
+    // Wochenzitat
     const quoteSection=document.createElement("div");
     quoteSection.classList.add("personalSection");
     quoteSection.innerHTML="<h3>Zitat der Woche</h3>";
@@ -182,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   archiveLink.onclick=()=>{
     archiveOverlay.style.display="flex";
+    personalOverlay.style.display="none";
     menu.style.right="-260px";
     menuOpen=false;
     showArchive();
