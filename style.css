@@ -1,9 +1,9 @@
 body {
   margin: 0;
   font-family: Georgia, serif;
-  background: url("Polar.jpg") center/cover fixed;
+  background: url('Polar.jpg') center/cover fixed;
+  text-align: center;
   color: black;
-  overflow-x: hidden;
 }
 
 /* MENU */
@@ -13,19 +13,21 @@ body {
   right: 20px;
   font-size: 2em;
   cursor: pointer;
-  z-index: 1000;
+  z-index: 2000;
 }
 
 #menu {
   position: fixed;
+  top: 0;
   right: -260px;
   width: 260px;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.95);
   padding-top: 60px;
-  transition: right .4s ease;
-  z-index: 999;
+  transition: right 0.4s ease;
+  z-index: 1500;
 }
+
 #menu a {
   display: block;
   padding: 15px;
@@ -35,117 +37,108 @@ body {
 
 /* HEADER */
 #header {
-  text-align: center;
-  margin-top: 30px;
+  margin-top: 20px;
+}
+
+#headerMain {
+  font-size: 1.6em;
   font-weight: bold;
 }
-#daytime { font-size: 2.2em; }
-#weekday, #date, #time { font-size: 1.3em; }
 
-/* COUNTDOWN */
 #yearCountdown {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  right: 15px;
+  bottom: 15px;
   background: rgba(255,255,255,0.6);
-  padding: 12px 18px;
-  border-radius: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
   font-weight: bold;
-  font-size: 1.2em;
 }
 
 /* MAIN */
-#main {
-  margin-top: 80px;
-  text-align: center;
+#buttons {
+  margin-top: 40px;
 }
 
-/* BUTTONS */
-#buttons button {
-  padding: 12px 18px;
+button {
+  padding: 10px 18px;
   margin: 5px;
   background: rgba(0,0,0,0.6);
   color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
-  transition: transform .2s;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
-#buttons button:active {
+
+button:active {
   transform: scale(0.9);
 }
 
-/* QUOTE */
-#animatedQuote {
-  margin: 40px auto;
-  padding: 15px 20px;
-  background: rgba(255,255,255,0.85);
-  border-radius: 14px;
+#dailyMotivationText {
+  margin-top: 40px;
+  font-size: 1.8em;
+  animation: fade 3s infinite;
+}
+
+@keyframes fade {
+  0%,100% {opacity:1;}
+  50% {opacity:0.4;}
+}
+
+#quoteDisplay {
+  margin-top: 30px;
+  background: rgba(255,255,255,0.7);
+  padding: 20px;
+  border-radius: 12px;
   display: inline-block;
   font-weight: bold;
-  animation: fadeIn .6s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity:0; transform: translateY(20px); }
-  to { opacity:1; transform: translateY(0); }
-}
-
-/* SLOGAN */
-#dailyMotivationText {
-  font-size: 1.6em;
-  font-weight: bold;
-  animation: pulse 4s infinite;
-}
-
-@keyframes pulse {
-  0%,100% { opacity: 1; }
-  50% { opacity: .6; }
-}
-
-/* OVERLAYS */
-.overlay {
+/* INFO OVERLAY */
+#infoOverlay {
   position: fixed;
   inset: 0;
-  background: url("Polar.jpg") center/cover fixed;
+  background: url('Polar.jpg') center/cover fixed;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: slideIn .8s ease;
-  z-index: 2000;
-}
-@keyframes slideIn {
-  from { transform: translateY(-100%); }
-  to { transform: translateY(0); }
-}
-
-#infoBox {
-  background: rgba(255,255,255,0.85);
-  padding: 25px;
-  border-radius: 14px;
-  text-align: center;
-  font-weight: bold;
-}
-
-.overlayContent {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: url("Polar.jpg") center/cover fixed;
-  padding: 40px;
-  overflow-y: auto;
-}
-
-#infoOverlay {
-  pointer-events: auto;
+  z-index: 3000;
 }
 
 #infoContent {
-  pointer-events: auto;
+  background: rgba(255,255,255,0.15);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
 }
 
 #startBtn {
-  pointer-events: auto;
-  z-index: 20000;
-  position: relative;
+  margin-top: 20px;
+}
+
+/* OVERLAYS */
+#personalOverlay,
+#archiveOverlay {
+  position: fixed;
+  inset: 0;
+  background: url('Polar.jpg') center/cover fixed;
+  display: none;
+  padding: 30px;
+  overflow-y: auto;
+  z-index: 2500;
+}
+
+.overlayHeader {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.note, .quoteBox {
+  background: rgba(255,255,255,0.8);
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: inline-block;
 }
