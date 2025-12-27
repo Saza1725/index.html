@@ -19,15 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const monthDetail = document.getElementById("monthDetail");
   const backBtn = document.getElementById("backBtn");
   const closeArchiveBtn = document.getElementById("closeArchiveBtn");
-  const infoOverlay = document.getElementById("infoOverlay");
-  const closeInfoBtn = document.getElementById("closeInfoBtn");
 
   let menuOpen = false;
   let quotesData = null;
   let personalNotes = [];
   let personalWeeklyQuote = "";
 
-  // MENU TOGGLE
+  // MENU
   menuButton.onclick = () => {
     menu.style.right = menuOpen ? "-260px" : "0";
     menuOpen = !menuOpen;
@@ -64,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     yearCountdownEl.innerText = `Noch ${d} Tage ${h} Std ${m} Min ${s} Sek bis Jahresende`;
   }
 
-  // TÄGLICHE ZITATE
+  // ZITATE
   fetch("quotes.json")
     .then(res=>res.json())
     .then(data=>{ quotesData=data; showDailyQuote(); })
@@ -102,12 +100,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // PERSÖNLICHER BEREICH
-  personalLink.onclick = ()=>{ 
-    personalOverlay.style.display="flex"; 
-    renderPersonal(); 
-  };
-  closePersonalBtn.onclick = ()=>{ personalOverlay.style.display="none"; };
-
   function renderPersonal(){
     personalContent.innerHTML="";
 
@@ -142,15 +134,27 @@ document.addEventListener("DOMContentLoaded", () => {
     personalContent.appendChild(quoteSection);
   }
 
+  personalLink.onclick = ()=>{
+    personalOverlay.style.display="flex";
+    renderPersonal();
+  };
+  closePersonalBtn.onclick = ()=>{ personalOverlay.style.display="none"; };
+
   // LADEN NOTES & WEEKLY
   fetch("notes.json")
     .then(res=>res.json())
-    .then(data=>{ personalNotes=data.notes||[]; })
+    .then(data=>{ 
+      personalNotes=data.notes||[]; 
+      renderPersonal(); // sicherstellen, dass Notizen direkt angezeigt werden
+    })
     .catch(()=>{ personalNotes=[]; });
 
   fetch("weeklyQuote.json")
     .then(res=>res.json())
-    .then(data=>{ personalWeeklyQuote=data.weeklyQuote||""; })
+    .then(data=>{
+      personalWeeklyQuote=data.weeklyQuote||"";
+      renderPersonal(); // sicherstellen, dass Wochenzitat direkt angezeigt wird
+    })
     .catch(()=>{ personalWeeklyQuote=""; });
 
   // ARCHIV
@@ -179,7 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
     quotesData.daily.forEach(q=>{
       const d = document.createElement("div");
       d.classList.add("archiveItem");
-      d.innerText = q;
+      d.innerText=q;
       dailySection.appendChild(d);
     });
     monthDetail.appendChild(dailySection);
@@ -187,11 +191,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Persönliche Zitate
     ["morning","noon","evening"].forEach(t=>{
       const sec = document.createElement("div");
-      sec.innerHTML = `<h4>${t.charAt(0).toUpperCase()+t.slice(1)} Zitate</h4>`;
+      sec.innerHTML=`<h4>${t.charAt(0).toUpperCase()+t.slice(1)} Zitate</h4>`;
       quotesData.personal[t].forEach(q=>{
         const d = document.createElement("div");
         d.classList.add("archiveItem");
-        d.innerText = q;
+        d.innerText=q;
         sec.appendChild(d);
       });
       monthDetail.appendChild(sec);
@@ -201,21 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
   archiveLink.onclick = ()=>{ archiveOverlay.style.display="flex"; showMonths(); };
   closeArchiveBtn.onclick = ()=>{ archiveOverlay.style.display="none"; };
   backBtn.onclick = showMonths;
-
-  // INFO OVERLAY
-  function showInfoOverlay(){ infoOverlay.classList.add("show"); }
-  closeInfoBtn.onclick = ()=>{ infoOverlay.classList.remove("show"); }
-  showInfoOverlay();
-
-  const infoLink = document.createElement("a");
-  infoLink.href="#";
-  infoLink.innerText="Information";
-  infoLink.onclick = (e)=>{
-    e.preventDefault();
-    showInfoOverlay();
-    return false;
-  };
-  menu.appendChild(infoLink);
 
   // START
   updateHeader();
