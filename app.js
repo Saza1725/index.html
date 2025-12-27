@@ -17,10 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const archiveLink = document.getElementById("archiveLink");
 
   const personalOverlay = document.getElementById("personalOverlay");
+  const personalContent = document.getElementById("personalContent");
   const closePersonalBtn = document.getElementById("closePersonalBtn");
-
-  const notesEl = document.getElementById("personalNotesContent");
-  const weeklyQuoteContent = document.getElementById("weeklyQuoteContent");
 
   const archiveOverlay = document.getElementById("archiveOverlay");
   const monthsContainer = document.getElementById("monthsContainer");
@@ -33,20 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let quotesData = null;
   let personalNotes = [];
   let personalWeeklyQuote = "";
-  
-  const weeklyQuoteContent = document.getElementById("weeklyQuoteContent");
-
-function updateWeeklyQuoteUI() {
-  if (!weeklyQuoteContent) return;
-
-  if (personalWeeklyQuote && personalWeeklyQuote.trim() !== "") {
-    weeklyQuoteContent.innerHTML =
-      `<div class="archiveItem">${personalWeeklyQuote}</div>`;
-  } else {
-    weeklyQuoteContent.innerHTML =
-      "<p>Kein Wochenzitat vorhanden.</p>";
-  }
-}
 
   /* ================== MENU ================== */
   menuButton.onclick = () => {
@@ -64,7 +48,9 @@ function updateWeeklyQuoteUI() {
   /* ================== HEADER ================== */
   function getCategory() {
     const h = new Date().getHours();
-    return h >= 6 && h < 12 ? "Morgen" : h < 18 ? "Mittag" : "Abend";
+    if (h >= 6 && h < 12) return "Morgen";
+    if (h >= 12 && h < 18) return "Mittag";
+    return "Abend";
   }
 
   function updateHeader() {
@@ -124,8 +110,7 @@ function updateWeeklyQuoteUI() {
   function showPersonalQuote(type) {
     if (!quotesData) return;
     const list = quotesData.personal[type];
-    personalQuoteEl.innerText =
-      list[getDayOfYear() % list.length];
+    personalQuoteEl.innerText = list[getDayOfYear() % list.length];
     personalQuoteEl.style.display = "block";
   }
 
@@ -139,7 +124,7 @@ function updateWeeklyQuoteUI() {
   /* ================== PERSÖNLICHER BEREICH ================== */
   personalLink.onclick = () => {
     personalOverlay.style.display = "flex";
-    renderPersonal();
+    showPersonalContent();
   };
 
   closePersonalBtn.onclick = () => {
@@ -147,31 +132,29 @@ function updateWeeklyQuoteUI() {
   };
 
   function showPersonalContent() {
-  personalContent.innerHTML = "<h2>Persönlicher Bereich</h2>";
+    personalContent.innerHTML = "<h2>Persönlicher Bereich</h2>";
 
-  // NOTIZEN
-  personalContent.innerHTML += "<h3>Meine Notizen</h3>";
-  if (personalNotes.length === 0) {
-    personalContent.innerHTML += "<p>Keine Notizen vorhanden.</p>";
-  } else {
-    personalNotes.forEach(n => {
-      personalContent.innerHTML += `<div class="archiveItem">${n}</div>`;
-    });
+    // NOTIZEN
+    personalContent.innerHTML += "<h3>Meine Notizen</h3>";
+    if (personalNotes.length === 0) {
+      personalContent.innerHTML += "<p>Keine Notizen vorhanden.</p>";
+    } else {
+      personalNotes.forEach(n => {
+        personalContent.innerHTML += `<div class="archiveItem">${n}</div>`;
+      });
+    }
+
+    // WOCHENZITAT
+    personalContent.innerHTML += "<h3>Zitat der Woche</h3>";
+    if (personalWeeklyQuote && personalWeeklyQuote.trim() !== "") {
+      personalContent.innerHTML +=
+        `<div class="archiveItem">${personalWeeklyQuote}</div>`;
+    } else {
+      personalContent.innerHTML += "<p>Kein Wochenzitat vorhanden.</p>";
+    }
   }
 
-  // WOCHENZITAT
-  personalContent.innerHTML += "<h3>Zitat der Woche</h3>";
-  if (personalWeeklyQuote) {
-    personalContent.innerHTML +=
-      `<div class="archiveItem">${personalWeeklyQuote}</div>`;
-  } else {
-    personalContent.innerHTML +=
-      "<p>Kein Wochenzitat vorhanden.</p>";
-  }
-}
- 
-
-  /* ================== NOTIZEN ================== */
+  /* ================== NOTIZEN (JSON) ================== */
   fetch("notes.json")
     .then(res => res.json())
     .then(data => {
@@ -181,20 +164,15 @@ function updateWeeklyQuoteUI() {
       personalNotes = [];
     });
 
-  /* ================== WOCHENZITAT ================== */
+  /* ================== WOCHENZITAT (JSON) ================== */
   fetch("weeklyQuote.json")
-  .then(res => {
-    if (!res.ok) throw new Error("weeklyQuote.json fehlt");
-    return res.json();
-  })
-  .then(data => {
-    personalWeeklyQuote = data.text || "";
-    updateWeeklyQuoteUI();
-  })
-  .catch(() => {
-    personalWeeklyQuote = "";
-    updateWeeklyQuoteUI();
-  });
+    .then(res => res.json())
+    .then(data => {
+      personalWeeklyQuote = data.text || "";
+    })
+    .catch(() => {
+      personalWeeklyQuote = "";
+    });
 
   /* ================== ARCHIV ================== */
   const months = [];
@@ -223,10 +201,11 @@ function updateWeeklyQuoteUI() {
     monthsContainer.innerHTML = "";
     backBtn.style.display = "block";
     monthDetail.style.display = "block";
+
     monthDetail.innerHTML =
       `<h3>${new Date(year, month - 1, 1)
         .toLocaleDateString("de-DE", { month: "long", year: "numeric" })}</h3>
-       <p>Archiv-Funktion vorbereitet.</p>`;
+       <p>Archiv vorbereitet.</p>`;
   }
 
   archiveLink.onclick = () => {
@@ -244,6 +223,7 @@ function updateWeeklyQuoteUI() {
   updateHeader();
   updateButtons();
   updateYearCountdown();
+  showDailyQuote();
 
   setInterval(() => {
     updateHeader();
