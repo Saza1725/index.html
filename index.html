@@ -1,66 +1,64 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Motivation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Motivation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="menuButton">☰</div>
+<!-- MENU -->
+<div id="menuButton">☰</div>
+<nav id="menu">
+  <a href="#" id="homeLink">Heute</a>
+  <a href="#" id="personalLink">Persönlich</a>
+  <a href="#" id="archiveLink">Archiv</a>
+</nav>
 
-  <nav id="menu">
-    <a href="#" id="homeLink">Heute</a>
-    <a href="#" id="personalLink">Persönlich</a>
-    <a href="#" id="archiveLink">Archiv</a>
-  </nav>
+<!-- HEADER -->
+<header id="header">
+  <div id="daytime"></div>
+  <div id="weekday"></div>
+  <div id="date"></div>
+  <div id="time"></div>
+</header>
 
-  <header id="header">
-    <div id="daytime"></div>
-    <div id="weekday"></div>
-    <div id="date"></div>
-    <div id="time"></div>
-  </header>
+<main id="main">
+  <div id="quote">Lädt...</div>
+  <div id="yearCountdown"></div>
 
-  <main id="main">
-    <div id="quote">Lädt...</div>
-    <div id="yearCountdown"></div>
-
-    <div id="buttons">
-      <button id="morningBtn">Morgen</button>
-      <button id="noonBtn">Mittag</button>
-      <button id="eveningBtn">Abend</button>
-    </div>
-
-    <div id="personalQuote"></div>
-  </main>
-
-  <!-- ARCHIV OVERLAY -->
-  <div id="archiveOverlay">
-    <div id="archiveHeader">
-      <span>Archiv</span>
-      <button id="closeArchiveBtn">✕</button>
-    </div>
-    <button id="backBtn">← Zurück</button>
-    <div id="monthsContainer"></div>
-    <div id="monthDetail"></div>
+  <div id="buttons">
+    <button id="morningBtn">Morgen</button>
+    <button id="noonBtn">Mittag</button>
+    <button id="eveningBtn">Abend</button>
   </div>
 
-  <!-- PERSÖNLICH OVERLAY -->
+  <div id="personalQuote"></div>
+</main>
+
+<!-- ARCHIV OVERLAY -->
+<div id="archiveOverlay">
+  <div id="archiveHeader">
+    <span>Archiv</span>
+    <button id="closeArchiveBtn">✕</button>
+  </div>
+  <button id="backBtn">← Zur Monatsübersicht</button>
+  <div id="monthsContainer"></div>
+  <div id="monthDetail"></div>
+</div>
+
+<!-- PERSÖNLICH OVERLAY -->
 <div id="personalOverlay">
   <div id="personalHeader">
     <span>Persönlich</span>
     <button id="closePersonalBtn">✕</button>
   </div>
-
-  <div id="weeklyQuoteSection">
-    <h3>Zitat der Woche</h3>
-    <div id="weeklyQuote"></div>
-  </div>
-
-  <div id="notesSection">
-    <h3>Meine Notizen</h3>
-    <ul id="notesList"></ul>
-  </div>
+  <div id="personalMenu"></div>
+  <button id="personalBackBtn">← Zur Übersicht</button>
+  <div id="personalDetail"></div>
 </div>
+
+<script src="app.js"></script>
+</body>
+</html>
