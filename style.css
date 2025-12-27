@@ -74,7 +74,7 @@ button:disabled { opacity: 0.4; }
 .overlay {
   position: fixed;
   inset: 0;
-  background: url('Polar.jpg') center/cover fixed;
+  background: url('Polar.jpg') center/cover fixed; /* Polar sichtbar */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -82,19 +82,21 @@ button:disabled { opacity: 0.4; }
 }
 
 #infoContent {
-  background: rgba(255,255,255,0); /* transparent */
-  padding: 20px;
+  background: rgba(0,0,0,0.4); /* leicht dunkler, transparent für bessere Lesbarkeit */
+  padding: 30px;
+  border-radius: 15px;
   max-width: 80%;
   text-align: center;
   font-weight: bold;
-  font-size: 1.2em;
-  cursor: pointer;
-  color: black;
+  color: white; /* Text gut sichtbar */
+  cursor: pointer; /* zeigt klickbar */
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 .slideIn {
   animation: slideDown 0.8s ease-out forwards;
 }
+
 @keyframes slideDown {
   0% { transform: translateY(-150%); opacity:0; }
   100% { transform: translateY(0); opacity:1; }
